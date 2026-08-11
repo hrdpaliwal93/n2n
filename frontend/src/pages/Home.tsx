@@ -3,10 +3,14 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function Home(){
+
     const  navigate = useNavigate()
 function handler(){
   navigate('/create-workflow')
 }
+
+
+
     return <div className="flex justify-center">
         <h1>welcome to n2n ! </h1>
      <div className="mt-10">

@@ -1,6 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, type NodeChange,type EdgeChange } from '@xyflow/react';
+
 import '@xyflow/react/dist/style.css';
+import Triggersheet from '@/components/ui/Triggersheet';
 
 interface NodeTypes{
   type: "trigger" | "action" | "condition" ,
@@ -16,25 +18,32 @@ interface EdgeTypes{
    source: string,
     target: string 
   }
+  // const initialNodes :NodeTypes[] = [
+  //   {id:"1", 
+  //     type:"trigger",
+  //      position:{x:0,y:100},
+  //     data:{label:"node1"
+  //     }}
+  // ]
 
-const initialNodes:NodeTypes[] = [
-  {id:"n1", position:{x:0,y:100}, type:"trigger", data:{label:"Node 1"}},
-  {id:"n2", position:{x:0,y:200}, type:"trigger", data:{label:"Node 2"}},
+
+
+const TriggerNodes:NodeTypes[] = [
+  {}
 ]
-const initialEdges:EdgeTypes[] = [
-  {id:"n1-n2",source:"n1", target:"n2" }
-]
- 
 export default function CreateWorkFlow() {
-  const [nodes, setNodes] = useState<NodeTypes[]>(initialNodes);
-  const [edges, setEdges] = useState<EdgeTypes[]>(initialEdges);
+
+  const [nodes, setNodes] = useState<NodeTypes[]>([]);
+  const [edges, setEdges] = useState<EdgeTypes[]>([]);
  
   const onNodesChange = useCallback((changes:NodeChange<NodeTypes>[]) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)), []);
   const onEdgesChange = useCallback((changes:EdgeChange<EdgeTypes>[]) => setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)), []);
   const onConnect = useCallback((params:any) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)), []);
  
-  return (
+  return <>
+    
     <div style={{ width: '100vw', height: '100vh' }}>
+      {!nodes.length && <Triggersheet />}
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -44,5 +53,6 @@ export default function CreateWorkFlow() {
         fitView
       />
     </div>
-  );
-}
+    </>
+    
+  }
