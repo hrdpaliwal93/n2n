@@ -1,12 +1,12 @@
 
-import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, type NodeChange, type EdgeChange } from '@xyflow/react';
+import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, type NodeChange, type EdgeChange, Controls, MiniMap, Background } from '@xyflow/react';
 import { useAppContext } from '@/context/appcontext';
 import '@xyflow/react/dist/style.css';
 import Triggersheet from '@/components/Triggersheet';
 import { useCallback } from 'react';
 
 export interface NodeTypes {
-  
+
   type: "trigger" | "action" | "condition",
   input?: string | Record<string, unknown>,
   output?: string | Record<string, unknown>,
@@ -32,7 +32,7 @@ export default function CreateWorkFlow() {
   return <>
 
     <div style={{ width: '100vw', height: '100vh' }}>
-      {!nodes.length && <Triggersheet />}
+      <Triggersheet />
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -40,7 +40,14 @@ export default function CreateWorkFlow() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         fitView
-      />
+        colorMode="system"
+        
+      >
+        <Background />
+        <Controls />
+        <MiniMap />
+
+      </ReactFlow>
     </div>
   </>
 

@@ -14,19 +14,6 @@ import {
 } from "@/components/ui/sheet"
 import { useAppContext } from "@/context/appcontext"
 
-/*
-  type: "trigger" | "action" | "condition",
-  input?: string | Record<string, unknown>,
-  output?: string | Record<string, unknown>,
-  id: string,
-  position: { x: number, y: number },
-  data: { label: string },
-
-}
- */
-
-//t
-
 
 export default function Triggersheet() {
 
@@ -46,22 +33,12 @@ export default function Triggersheet() {
     ])
   }
 
-  /*
-      setNodes((previous) => [
-        ...previous,
-        {
-          type: "trigger", // Fixes the literal union type error
-          id: (previous.length + 1).toString(),
-          position: { x: 0, y: 100 },
-          data: { label: `${triggerName} trigger` }
-        }
-      ])
-  */
 
   return (
     <Sheet >
       <SheetTrigger render={<Button variant="outline">Add Node</Button>} />
-      <SheetContent >
+      <Button variant="destructive" onClick={() => setNodes([])}>Clear Workflow</Button>
+      <SheetContent className={"overflow-y-scroll"}>
 
         <SheetHeader>
           <SheetTitle>select Trigger</SheetTitle>
@@ -77,12 +54,37 @@ export default function Triggersheet() {
           ))
 
         }
+        <SheetHeader>
+          <SheetTitle>select Actions</SheetTitle>
+          <SheetDescription>
+            Action is some task that your workflow will perform.
+          </SheetDescription>
+        </SheetHeader>
+        {
 
+          Actions.map((element) => (
+            <div onClick={() => createNodeHandler("action", element.name)}
+              className="cursor-pointer border-t border-b p-2 hover:bg-muted/50" key={element.name}> {element.name}<p>{element.description}</p></div>
+          ))
 
+        }
+        <SheetHeader>
+          <SheetTitle>select Conditions</SheetTitle>
+          <SheetDescription>
+            Conditions are some Event that initiates your workflow.
+          </SheetDescription>
+        </SheetHeader>
+        {
+
+          Conditions.map((element) => (
+            <div onClick={() => createNodeHandler("condition", element.name)}
+              className="cursor-pointer border-t border-b p-2 hover:bg-muted/50" key={element.name}> {element.name}<p>{element.description}</p></div>
+          ))
+
+        }
 
         <SheetFooter>
-          <Button type="submit">Save changes</Button>
-          <SheetClose render={<Button variant="outline">Close</Button>} />
+          <SheetClose render={<Button variant="default">Close</Button>} />
         </SheetFooter>
       </SheetContent>
     </Sheet>
