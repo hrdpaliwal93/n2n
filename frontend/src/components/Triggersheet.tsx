@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Triggers } from '../nodes/Triggers/trigger'
-import { Actions } from '../nodes/Actions/actions'
-import { Conditions } from "@/nodes/conditions/conditions"
+import { Triggers, Actions, Conditions, type NodeDefinition } from '../nodes/listofnodes'
 import {
   Sheet,
   SheetClose,
@@ -14,79 +12,95 @@ import {
 } from "@/components/ui/sheet"
 import { useAppContext } from "@/context/appcontext"
 
-
 export default function Triggersheet() {
-
   const { setNodes } = useAppContext()
 
-
-  function createNodeHandler(type: string, label: string) {
-
+  function createNodeHandler(nodeDef: NodeDefinition) {
     setNodes((previous) => [
-      ...previous, {
-        type: type as "trigger" | "action" | "condition",
-        id: (previous.length + 1).toString(),
-        position: { x: 0, y: 100 },
-        data: { label: `${label}` },
-
+      ...previous,
+      {
+        id: `node-${Date.now()}`,
+        type: nodeDef.kind,
+        kind: nodeDef.kind,
+        position: { x: 100 + (previous.length * 40), y: 100 + (previous.length * 40) },
+        data: { label: nodeDef.name },
       },
     ])
   }
 
-
   return (
-    <Sheet >
-      <SheetTrigger render={<Button variant="outline">Add Node</Button>} />
-      <Button variant="destructive" onClick={() => setNodes([])}>Clear Workflow</Button>
-      <SheetContent className={"overflow-y-scroll"}>
+    <Sheet>
+      <div className="p-4 flex gap-2 border-b bg-background/95 backdrop-blur z-10 relative">
+        <SheetTrigger render={<Button variant="default">Add Node</Button>} />
+        <Button variant="destructive" onClick={() => setNodes([])}>Clear Workflow</Button>
+      </div>
 
-        <SheetHeader>
-          <SheetTitle>select Trigger</SheetTitle>
+      <SheetContent className="overflow-y-auto">
+        <SheetHeader className="mb-4">
+          <SheetTitle>Select Trigger</SheetTitle>
           <SheetDescription>
-            Trigger is some Event that initiates your workflow.
+            Triggers initiate your workflow based on specific events.
           </SheetDescription>
         </SheetHeader>
-        {
+        
+        <div className="space-y-2 mb-6">
+          {Triggers.map((element) => (
+            <div
+              key={element.kind}
+              onClick={() => createNodeHandler(element)}
+              className="cursor-pointer border rounded-lg p-3 hover:bg-accent transition-colors"
+            >
+              <div className="font-semibold text-sm">{element.name}</div>
+              <p className="text-xs text-muted-foreground mt-0.5">{element.description}</p>
+            </div>
+          ))}
+        </div>
 
-          Triggers.map((element) => (
-            <div onClick={() => createNodeHandler("trigger", element.name)}
-              className="cursor-pointer border-t border-b p-2 hover:bg-muted/50" key={element.name}> {element.name}<p>{element.description}</p></div>
-          ))
-
-        }
-        <SheetHeader>
-          <SheetTitle>select Actions</SheetTitle>
+        <SheetHeader className="mb-4">
+          <SheetTitle>Select Actions</SheetTitle>
           <SheetDescription>
-            Action is some task that your workflow will perform.
+            Actions perform tasks in your workflow.
           </SheetDescription>
         </SheetHeader>
-        {
 
-          Actions.map((element) => (
-            <div onClick={() => createNodeHandler("action", element.name)}
-              className="cursor-pointer border-t border-b p-2 hover:bg-muted/50" key={element.name}> {element.name}<p>{element.description}</p></div>
-          ))
+        <div className="space-y-2 mb-6">
+          {Actions.map((element) => (
+            <div
+              key={element.kind}
+              onClick={() => createNodeHandler(element)}
+              className="cursor-pointer border rounded-lg p-3 hover:bg-accent transition-colors"
+            >
+              <div className="font-semibold text-sm">{element.name}</div>
+              <p className="text-xs text-muted-foreground mt-0.5">{element.description}</p>
+            </div>
+          ))}
+        </div>
 
-        }
-        <SheetHeader>
-          <SheetTitle>select Conditions</SheetTitle>
+        <SheetHeader className="mb-4">
+          <SheetTitle>Select Conditions</SheetTitle>
           <SheetDescription>
-            Conditions are some Event that initiates your workflow.
+            Conditions branch your workflow logic.
           </SheetDescription>
         </SheetHeader>
-        {
 
-          Conditions.map((element) => (
-            <div onClick={() => createNodeHandler("condition", element.name)}
-              className="cursor-pointer border-t border-b p-2 hover:bg-muted/50" key={element.name}> {element.name}<p>{element.description}</p></div>
-          ))
+        <div className="space-y-2 mb-6">
+          {Conditions.map((element) => (
+            <div
+              key={element.kind}
+              onClick={() => createNodeHandler(element)}
+              className="cursor-pointer border rounded-lg p-3 hover:bg-accent transition-colors"
+            >
+              <div className="font-semibold text-sm">{element.name}</div>
+              <p className="text-xs text-muted-foreground mt-0.5">{element.description}</p>
+            </div>
+          ))}
+        </div>
 
-        }
-
-        <SheetFooter>
-          <SheetClose render={<Button variant="default">Close</Button>} />
+        <SheetFooter className="mt-6">
+          <SheetClose render={<Button variant="outline">Close</Button>} />
         </SheetFooter>
       </SheetContent>
     </Sheet>
   )
 }
+
