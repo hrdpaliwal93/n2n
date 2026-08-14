@@ -1,6 +1,6 @@
-import { Position, Handle, type NodeProps } from '@xyflow/react';
+import { Position, Handle} from '@xyflow/react';
 
-export function Fromsubmit(props: NodeProps) {
+export function Fromsubmit() {
   return (
     <div className="bg-white dark:bg-slate-900 border-2 border-purple-500 rounded-xl p-3.5 shadow-md min-w-[220px] text-slate-900 dark:text-slate-100">
       {/* Node Header */}

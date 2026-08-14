@@ -3,10 +3,11 @@ import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, type NodeChange
 import { useAppContext } from '@/context/appcontext';
 import '@xyflow/react/dist/style.css';
 import Triggersheet from '@/components/Triggersheet';
-import { useCallback } from 'react';
+import { useCallback , useState } from 'react';
 import { Fromsubmit } from '@/nodes/Triggers/Formsubmit';
 import { Manual } from '@/nodes/Triggers/Manual';
 import { Schedule } from '@/nodes/Triggers/Schedule';
+import Parameters from '@/components/Parameters';
 export interface NodeTypes {
 
   category: "trigger" | "action" | "condition",
@@ -31,6 +32,7 @@ const nodetypes = {
 }
 export default function CreateWorkFlow() {
   const { nodes, setNodes, edges, setEdges } = useAppContext()
+  const [selectedNode, setSelectedNode] = useState<NodeTypes | null>(null);
 
 
   const onNodesChange = useCallback((changes: NodeChange<NodeTypes>[]) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)), []);
@@ -48,6 +50,8 @@ export default function CreateWorkFlow() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodetypes}
+        onNodeClick={(event, node) => {setSelectedNode(node)}}
+
         fitView
         colorMode="system"
         
@@ -57,6 +61,13 @@ export default function CreateWorkFlow() {
         <MiniMap />
 
       </ReactFlow>
+
+      {selectedNode && (
+      <Parameters node={selectedNode} onClose={() => setSelectedNode(null)} />
+)}
+
+
+
     </div>
   </>
 
