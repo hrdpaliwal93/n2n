@@ -18,11 +18,13 @@ export default function Triggersheet() {
   const { setNodes } = useAppContext()
 
 
-  function createNodeHandler(type: string, label: string) {
+  function createNodeHandler(category: string, label: string, type:string) {
 
     setNodes((previous) => [
       ...previous, {
-        type: type as "trigger" | "action" | "condition",
+        category:category as  "trigger" | "action" | "condition",
+        type:type,
+
         id: (previous.length + 1).toString(),
         position: { x: 0, y: 100 },
         data: { label: `${label}` },
@@ -36,7 +38,7 @@ export default function Triggersheet() {
     <Sheet >
       <SheetTrigger render={<Button variant="outline">Add Node</Button>} />
       <Button variant="destructive" onClick={() => setNodes([])}>Clear Workflow</Button>
-      <SheetContent className={"overflow-y-auto"}>
+      <SheetContent className={"overflow-y-scroll"}>
 
         <SheetHeader>
           <SheetTitle>select Trigger</SheetTitle>
@@ -48,7 +50,7 @@ export default function Triggersheet() {
           {
 
             Triggers.map((element) => (
-              <div onClick={() => createNodeHandler("trigger", element.name)}
+              <div onClick={() => createNodeHandler("trigger", element.name, element.type)}
                 className="cursor-pointer border-1 border-black rounded-lg p-2 hover:bg-muted/50" key={element.name}> {element.name}<p>{element.description}</p></div>
             ))
 
@@ -66,7 +68,7 @@ export default function Triggersheet() {
           {
 
             Actions.map((element) => (
-              <div onClick={() => createNodeHandler("action", element.name)}
+              <div onClick={() => createNodeHandler("action", element.name, element.type)}
                 className="cursor-pointer border-1 border-black rounded-lg p-2 hover:bg-muted/50" key={element.name}> {element.name}<p>{element.description}</p></div>
             ))
 
@@ -82,7 +84,7 @@ export default function Triggersheet() {
           {
 
             Conditions.map((element) => (
-              <div onClick={() => createNodeHandler("condition", element.name)}
+              <div onClick={() => createNodeHandler("condition", element.name, element.type)}
                 className="cursor-pointer border-1 border-black rounded-lg p-2 hover:bg-muted/50" key={element.name}> {element.name}<p>{element.description}</p></div>
             ))
 

@@ -4,10 +4,13 @@ import { useAppContext } from '@/context/appcontext';
 import '@xyflow/react/dist/style.css';
 import Triggersheet from '@/components/Triggersheet';
 import { useCallback } from 'react';
-
+import { Fromsubmit } from '@/nodes/Triggers/Formsubmit';
+import { Manual } from '@/nodes/Triggers/Manual';
+import { Schedule } from '@/nodes/Triggers/Schedule';
 export interface NodeTypes {
 
-  type: "trigger" | "action" | "condition",
+  category: "trigger" | "action" | "condition",
+  type:string,
   input?: string | Record<string, unknown>,
   output?: string | Record<string, unknown>,
   id: string,
@@ -21,6 +24,11 @@ export interface EdgeTypes {
   target: string
 }
 
+const nodetypes = {
+  formsubmit:Fromsubmit,
+  manual:Manual,
+  schedule:Schedule
+}
 export default function CreateWorkFlow() {
   const { nodes, setNodes, edges, setEdges } = useAppContext()
 
@@ -39,6 +47,7 @@ export default function CreateWorkFlow() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        nodeTypes={nodetypes}
         fitView
         colorMode="system"
         

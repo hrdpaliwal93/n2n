@@ -1,23 +1,24 @@
 interface NodeDefinition{
-    type:"trigger"|"action"|"condition",
+    category:"trigger"|"action"|"condition",
+    type:string,
     name:string,
     description:string
 }
 
 
 const Triggers: NodeDefinition[] = [
-    {type:"trigger",name:"Manual Trigger",description:"Runs workflow on button click"},
-    {type:"trigger",name:"Schedule Trigger",description:"Runs workflow at scheduled intervals"},
-    {type:"trigger",name:"Form Submit Trigger",description:"Runs when a form is submitted"},
+    {category:"trigger",name:"Manual category",type:"manual",description:"Runs workflow on button click"},
+    {category:"trigger",name:"Schedule Trigger",type:"schedule",description:"Runs workflow at scheduled intervals"},
+    {category:"trigger",name:"Form Submit Trigger",type:"formsubmit",description:"Runs when a form is submitted"},
 ]
 
 const Actions: NodeDefinition[] = [
-    {type:"action",name:"HTTP Request",description:"Send a GET/POST web request"},
-    {type:"action",name:"Send Email",description:"Send an email via SMTP"},
+    {category:"action",name:"HTTP Request",type:"httprequest",description:"Send a GET/POST web request"},
+    {category:"action",name:"Send Email",type:"sendemail",description:"Send an email via SMTP"},
 ]
 const Conditions: NodeDefinition[] = [
-    {type:"condition",name:"If / Else",description:"Branch workflow based on condition"},
-    {type:"condition",name:"Switch",description:"Branch into multiple paths"},
+    {category:"condition",name:"If / Else",type:"ifelse",description:"Branch workflow based on condition"},
+    {category:"condition",name:"Switch",type:"switch",description:"Branch into multiple paths"},
 ]
 
 export  {Triggers,Actions,Conditions}
