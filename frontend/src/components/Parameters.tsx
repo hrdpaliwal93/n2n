@@ -6,56 +6,56 @@ import {
     SheetFooter,
     SheetHeader,
     SheetTitle,
-    SheetTrigger
 } from "@/components/ui/sheet"
 import { Button } from "./ui/button"
+import type { NodeTypes } from "@/pages/CreateWorkFlow";
+import { useAppContext } from "@/context/appcontext";
+import { HttpRequestParams } from "@/nodes/Actions/HttpRequest";
 
+// Parameter Form Registry Map
+const PARAM_COMPONENTS: Record<string, React.ComponentType<{ node: NodeTypes }>> = {
+    httprequest: HttpRequestParams,
+};
 
+export default function Parameters({ node, onClose }: { node: NodeTypes, onClose: () => void }) {
+    const { setNodes, setEdges } = useAppContext();
 
-export default function Parameters({ node, onClose }: { node: any, onClose: () => void }) {
+    // Look up component based on node type
+    const ParamForm = PARAM_COMPONENTS[node.type];
+
     return (
         <Sheet open={true} onOpenChange={(open) => { if (!open) onClose(); }}>
-            <SheetTrigger render={<Button variant="outline">Add Node</Button>} />
-            PARAMETERS
-
-            <SheetContent className={"overflow-y-scroll"} >
-
+            <SheetContent className="overflow-y-scroll">
                 <SheetHeader>
-                    <SheetTitle>enter details</SheetTitle>
+                    <SheetTitle>Configure Node</SheetTitle>
                     <SheetDescription>
-                        entyer yout pai key
+                        Set properties and configuration for {node.data?.label || node.type}.
                     </SheetDescription>
                 </SheetHeader>
-                <div>
-                    if(`${node}`.type === "httprequest"){
-                        <input type="text " placeholder="enter api key" />
-                    }
-                    else if(`${node}`.type === "sendemail"){
-                        <input type="text " placeholder="enter email" />
-                    }
-                    else if(`${node}`.type === "manual"){
-                        <input type="text " placeholder="enter manual" />
-                    }
-                    else if(`${node}`.type === "schedule"){
-                        <input type="text " placeholder="enter schedule" />
-                    }
-                    else if(`${node}`.type === "formsubmit"){
-                        <input type="text " placeholder="enter formsubmit" />
-                    }
-                    else if(`${node}`.type === "ifelse"){
-                        <input type="text " placeholder="enter ifelse" />
-                    }
-                    else if(`${node}`.type === "switch"){
-                        <input type="text " placeholder="enter switch" />
-                    }
+
+                <div className="py-4">
+                    {ParamForm ? (
+                        <ParamForm node={node} />
+                    ) : (
+                        <div className="p-4 border border-dashed rounded-md text-center text-sm text-muted-foreground">
+                            No configurable parameters available for node type: <span className="font-mono font-semibold">{node.type}</span>
+                        </div>
+                    )}
                 </div>
-                <SheetFooter className="mt-4">
+
+                <SheetFooter className="mt-4 flex gap-2">
+                    <Button variant="destructive" onClick={() => {
+                        setNodes((prevNodes) => prevNodes.filter((n) => n.id !== node.id));
+                        setEdges((prevEdges) => prevEdges.filter((edge) => edge.source !== node.id && edge.target !== node.id));
+                        onClose();
+                    }}>
+                        Delete Node
+                    </Button>
                     <SheetClose>
                         <Button variant="default" onClick={onClose}>Save & Close</Button>
                     </SheetClose>
                 </SheetFooter>
             </SheetContent>
         </Sheet>
-    )
-
-}
+    );
+}

@@ -7,7 +7,9 @@ import { useCallback , useState } from 'react';
 import { Fromsubmit } from '@/nodes/Triggers/Formsubmit';
 import { Manual } from '@/nodes/Triggers/Manual';
 import { Schedule } from '@/nodes/Triggers/Schedule';
+
 import Parameters from '@/components/Parameters';
+import HttpRequest from '@/nodes/Actions/HttpRequest';
 export interface NodeTypes {
 
   category: "trigger" | "action" | "condition",
@@ -28,7 +30,8 @@ export interface EdgeTypes {
 const nodetypes = {
   formsubmit:Fromsubmit,
   manual:Manual,
-  schedule:Schedule
+  schedule:Schedule,
+  httprequest:HttpRequest
 }
 export default function CreateWorkFlow() {
   const { nodes, setNodes, edges, setEdges } = useAppContext()
@@ -51,6 +54,7 @@ export default function CreateWorkFlow() {
         onConnect={onConnect}
         nodeTypes={nodetypes}
         onNodeClick={(event, node) => {setSelectedNode(node)}}
+
 
         fitView
         colorMode="system"
