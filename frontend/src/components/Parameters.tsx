@@ -11,10 +11,14 @@ import { Button } from "./ui/button"
 import type { NodeTypes } from "@/pages/CreateWorkFlow";
 import { useAppContext } from "@/context/appcontext";
 import { HttpRequestParams } from "@/nodes/Actions/HttpRequest";
+import {AIChatParams }from "@/nodes/Actions/AIChatResponse";
+import {formsubmitparams} from "@/nodes/Triggers/Formsubmit"
 
 // Parameter Form Registry Map
 const PARAM_COMPONENTS: Record<string, React.ComponentType<{ node: NodeTypes }>> = {
     httprequest: HttpRequestParams,
+    aichat: AIChatParams,
+    formsubmit:formsubmitparams
 };
 
 export default function Parameters({ node, onClose }: { node: NodeTypes, onClose: () => void }) {
@@ -52,10 +56,10 @@ export default function Parameters({ node, onClose }: { node: NodeTypes, onClose
                         Delete Node
                     </Button>
                     <SheetClose>
-                        <Button variant="default" onClick={onClose}>Save & Close</Button>
+                        <Button variant="default" onClick={onClose}>Close</Button>
                     </SheetClose>
                 </SheetFooter>
             </SheetContent>
         </Sheet>
     );
-}
+}

@@ -1,6 +1,6 @@
 import { Position, Handle} from '@xyflow/react';
 
-export function Fromsubmit() {
+export default function Fromsubmit() {
   return (
     <div className="bg-white dark:bg-slate-900 border-2 border-purple-500 rounded-xl p-3.5 shadow-md min-w-[220px] text-slate-900 dark:text-slate-100">
       {/* Node Header */}
@@ -26,3 +26,21 @@ export function Fromsubmit() {
     </div>
   );
 }
+
+
+export function formsubmitparams(){
+return <div>
+  <input type="text"  placeholder="enter label" />
+  <input type="text"  placeholder="enter label" />
+  <input type="text"  placeholder="enter label" />
+  <input type="text"  placeholder="enter label" />
+  <input type="text"  placeholder="enter label" />
+  <input type="text"  placeholder="enter label" />
+  <input type="text"  placeholder="enter label" />
+
+  <button>submit</button>
+</div>
+
+
+}
+

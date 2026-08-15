@@ -4,12 +4,14 @@ import { useAppContext } from '@/context/appcontext';
 import '@xyflow/react/dist/style.css';
 import Triggersheet from '@/components/Triggersheet';
 import { useCallback , useState } from 'react';
-import { Fromsubmit } from '@/nodes/Triggers/Formsubmit';
+import  Formsubmit  from '@/nodes/Triggers/Formsubmit';
 import { Manual } from '@/nodes/Triggers/Manual';
 import { Schedule } from '@/nodes/Triggers/Schedule';
-
+import AIChatResponse from '@/nodes/Actions/AIChatResponse';
 import Parameters from '@/components/Parameters';
 import HttpRequest from '@/nodes/Actions/HttpRequest';
+
+
 export interface NodeTypes {
 
   category: "trigger" | "action" | "condition",
@@ -18,7 +20,15 @@ export interface NodeTypes {
   output?: string | Record<string, unknown>,
   id: string,
   position: { x: number, y: number },
-  data: { label: string },
+  data: {
+     label: string,
+    body?:Record<string,unknown>,
+    headers?:Record<string,unknown>,
+    method?:string,
+    url?:string,
+    model?:string,
+    api?:string
+  },
 
 }
 export interface EdgeTypes {
@@ -28,10 +38,11 @@ export interface EdgeTypes {
 }
 
 const nodetypes = {
-  formsubmit:Fromsubmit,
+  formsubmit:Formsubmit,
   manual:Manual,
   schedule:Schedule,
-  httprequest:HttpRequest
+  httprequest:HttpRequest,
+  aichat:AIChatResponse
 }
 export default function CreateWorkFlow() {
   const { nodes, setNodes, edges, setEdges } = useAppContext()

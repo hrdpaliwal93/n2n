@@ -15,6 +15,7 @@ const Triggers: NodeDefinition[] = [
 const Actions: NodeDefinition[] = [
     {category:"action",name:"HTTP Request",type:"httprequest",description:"Send a GET/POST web request"},
     {category:"action",name:"Send Email",type:"sendemail",description:"Send an email via SMTP"},
+    {category:"action",name:"AI Chat ",type:"aichat",description:"send a prompt to ai chat model and get the response"},
 ]
 const Conditions: NodeDefinition[] = [
     {category:"condition",name:"If / Else",type:"ifelse",description:"Branch workflow based on condition"},
