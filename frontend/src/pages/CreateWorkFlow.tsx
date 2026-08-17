@@ -66,6 +66,8 @@ export default function CreateWorkFlow() {
         nodeTypes={nodetypes}
         onNodeClick={(event, node) => {setSelectedNode(node)}}
 
+        //delete an edge on clicking it and then presing delete key 
+
 
         fitView
         colorMode="system"
