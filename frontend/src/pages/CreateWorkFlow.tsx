@@ -1,5 +1,5 @@
 
-import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, type NodeChange, type EdgeChange, Controls, MiniMap, Background } from '@xyflow/react';
+import { ReactFlow, applyNodeChanges, applyEdgeChanges, type Edge, addEdge, type NodeChange, type EdgeChange, Controls, MiniMap, Background } from '@xyflow/react';
 import { useAppContext } from '@/context/appcontext';
 import '@xyflow/react/dist/style.css';
 import Triggersheet from '@/components/Triggersheet';
@@ -10,6 +10,8 @@ import { Schedule } from '@/nodes/Triggers/Schedule';
 import AIChatResponse from '@/nodes/Actions/AIChatResponse';
 import Parameters from '@/components/Parameters';
 import HttpRequest from '@/nodes/Actions/HttpRequest';
+import ifElse from '@/nodes/conditions/ifElse';
+
 
 
 export interface NodeTypes {
@@ -42,7 +44,8 @@ const nodetypes = {
   manual:Manual,
   schedule:Schedule,
   httprequest:HttpRequest,
-  aichat:AIChatResponse
+  aichat:AIChatResponse,
+  ifelse:ifElse
 }
 export default function CreateWorkFlow() {
   const { nodes, setNodes, edges, setEdges } = useAppContext()
@@ -65,7 +68,9 @@ export default function CreateWorkFlow() {
         onConnect={onConnect}
         nodeTypes={nodetypes}
         onNodeClick={(event, node) => {setSelectedNode(node)}}
-
+         deleteKeyCode={['Backspace', 'Delete']}
+       
+      
         //delete an edge on clicking it and then presing delete key 
 
 

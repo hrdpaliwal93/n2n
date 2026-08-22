@@ -27,6 +27,8 @@ export default function httprequest() {
       position={Position.Right}
       className="!w-3 !h-3 !bg-purple-500 !border-2 !border-white dark:!border-slate-900"
     />
+
+      <Handle type="target"  className="!w-3 !h-3 !bg-purple-500 !border-2 !border-white dark:!border-slate-900" position={Position.Left} />
   </div>
 }
 
