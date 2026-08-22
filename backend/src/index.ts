@@ -16,5 +16,11 @@ app.use(express.json())
 
 
 
+app.post('/api/v1/save-workflow', (req,res)=>{
+    const workflow =(req.body);
+   
+   console.dir(workflow, { depth: null });
 
+    res.json({message:"workflow received", success:true})
+})
 app.listen(8000)

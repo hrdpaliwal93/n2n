@@ -1,37 +1,59 @@
+import { createContext, useContext, useState, type ReactNode } from "react"
+import { useNavigate, type NavigateFunction } from "react-router-dom"
+import { type NodeTypes, type EdgeTypes } from "@/pages/CreateWorkFlow"
+import axios from 'axios'
 
-import { createContext,useContext, useState, type  ReactNode } from "react"
-import {useNavigate} from "react-router-dom"
-import { type NodeTypes,type  EdgeTypes } from "@/pages/CreateWorkFlow"
-
-interface AppProviderType{
-  nodes:NodeTypes [],
-  setNodes: React.Dispatch<React.SetStateAction<NodeTypes[]>>,
-  edges:EdgeTypes[],
-  setEdges:React.Dispatch<React.SetStateAction<EdgeTypes[]>>,
+interface AppContextType {
+  nodes: NodeTypes[];
+  setNodes: React.Dispatch<React.SetStateAction<NodeTypes[]>>;
+  edges: EdgeTypes[];
+  setEdges: React.Dispatch<React.SetStateAction<EdgeTypes[]>>;
+  navigate: NavigateFunction;
+  saveWorkflow: () => Promise<void>;
 }
 
-const AppContext  = createContext<AppProviderType | null> (null)  //takes a default value
+const AppContext = createContext<AppContextType | null>(null)
 
-export function AppProvider({children}:{children:ReactNode}){
+export function AppProvider({ children }: { children: ReactNode }) {
+  const navigate = useNavigate()
+  const [nodes, setNodes] = useState<NodeTypes[]>([])
+  const [edges, setEdges] = useState<EdgeTypes[]>([])
 
-    const navigate = useNavigate()
-     const [nodes,setNodes] = useState<NodeTypes[]>([])
-     const [edges, setEdges] = useState<EdgeTypes[]>([])
-   
-    
-  
-     const value = {nodes, setNodes, edges, setEdges,navigate}
+  async function saveWorkflow() {
+    const workflow = {
+      Nodes: nodes,
+      Edges: edges,
+    }
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/save-workflow`,
+         workflow ,
+        {
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      )
 
-        return <AppContext.Provider value={value}>{children}</AppContext.Provider>
+      if (response.data.success) {
+        alert(response.data.message)
+      }
+    } catch (e: any) {
+      console.error(e.message)
+    }
+  }
 
+  const value = { nodes, setNodes, edges, setEdges, navigate, saveWorkflow }
+
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }
 
-  
-
-export function useAppContext(){
+export function useAppContext() {
   const context = useContext(AppContext)
-   if (!context) {
-    throw new Error("useAppContext must be used within an AppProvider");}
-  else return context
+  if (!context) {
+    throw new Error("useAppContext must be used within an AppProvider")
+  }
+  return context
 }
+
  
