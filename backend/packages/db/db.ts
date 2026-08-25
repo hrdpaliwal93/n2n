@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-mongoose.connect(`${process.env.DATABASE_URL}/n2n`).then(()=>console.log("db connected!")).catch((e)=>console.error(e.message))
+mongoose.connect("mongodb+srv://hardikpaliwal2015:admin123@cluster0.jnppl4b.mongodb.net/n2n").then(()=>console.log("db connected!")).catch((e)=>console.error(e.message))
 
 
 const userSchema = new mongoose.Schema({

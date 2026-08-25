@@ -22,16 +22,16 @@ app.post('/signup', async (req, res) => {
 });
 app.post('/save-workflow', async (req, res) => {
     const workflow = (req.body);
-    console.log(workflow);
-    res.send("wewewee");
     try {
-        await workflowModel.create(workflow);
+        await workflowModel.create({
+            nodes: workflow.Nodes,
+            edges: workflow.Edges
+        });
         res.json({ message: "workflow saved ", success: true });
     }
     catch (e) {
         console.error(e.message);
     }
-    res.json({ message: "workflow received", success: true });
 });
 app.listen(8000);
 //# sourceMappingURL=index.js.map
