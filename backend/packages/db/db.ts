@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-mongoose.connect(`${process.env.DATABASE_URL}/n2n`).then(()=>console.log("db connrctd!")).catch((e)=>console.error(e.message))
+mongoose.connect(`${process.env.DATABASE_URL}/n2n`).then(()=>console.log("db connected!")).catch((e)=>console.error(e.message))
 
 
 const userSchema = new mongoose.Schema({
@@ -11,10 +11,26 @@ const userSchema = new mongoose.Schema({
 
 const workflowSchema = new mongoose.Schema({
     userID:{type:mongoose.Schema.Types.ObjectId, ref:"User"},
+    title:String,
     nodes:Array,
     edges:Array,
     
 })
 
-export const User = mongoose.model("User", userSchema)
-export const Workflow = mongoose.model("Workflow", workflowSchema)
+
+const nodeDefineSchema = new mongoose.Schema({
+    category:{type:String, enum:["trigger", "action", "condition"]},
+    type:String,
+    name:String,
+    description:String,
+   
+    
+})
+
+
+const userModel = mongoose.model("User", userSchema)
+const workflowModel = mongoose.model("Workflow", workflowSchema)
+const nodeModel= mongoose.model("Node", nodeDefineSchema)
+
+
+export {userModel, workflowModel, nodeModel}

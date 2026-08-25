@@ -22,6 +22,7 @@ export interface NodeTypes {
   output?: string | Record<string, unknown>,
   id: string,
   position: { x: number, y: number },
+  status?:"pending"|"completed"|"failed",
   data: {
      label: string,
     body?:Record<string,unknown>,
@@ -29,7 +30,8 @@ export interface NodeTypes {
     method?:string,
     url?:string,
     model?:string,
-    api?:string
+    api?:string,
+    content?:string
   },
 
 }

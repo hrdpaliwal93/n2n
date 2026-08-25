@@ -26,7 +26,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/save-workflow`,
+        `${import.meta.env.VITE_BACKEND_URL}/save-workflow`,
          workflow ,
         {
           headers: {
