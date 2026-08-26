@@ -12,8 +12,8 @@ const userSchema = new mongoose.Schema({
 const workflowSchema = new mongoose.Schema({
     userID:{type:mongoose.Schema.Types.ObjectId, ref:"User"},
     title:String,
-    nodes:Array,
-    edges:Array,
+    nodes:[],
+    edges:[],
     
 })
 

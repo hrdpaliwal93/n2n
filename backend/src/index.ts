@@ -1,6 +1,9 @@
 import express from 'express'
 import cors from 'cors'
+
 import {userModel, workflowModel} from '../packages/db/db.js'
+import jwt from 'jsonwebtoken'
+import Auth from '../auth/auth.js'
 const app = express()
 app.use(cors())
 app.use(express.json())
@@ -16,6 +19,8 @@ app.use(express.json())
 //execute  a worrkflow 
 
 
+//need zod validation and password bcrypt and correct matching 
+
 
 app.post('/signup', async (req,res)=>{
     const {username, password} = req.body;
@@ -28,12 +33,30 @@ app.post('/signup', async (req,res)=>{
 
 })
 
-app.post('/save-workflow',async (req,res)=>{
+
+app.post('/login', async (req,res)=>{
+    const {username, password} = req.body;
+    try{
+        const user = await userModel.findOne({username, password})
+        if(user){
+            const token = jwt.sign(user._id.toString(), "thismyjsownwentokensecret")
+            res.json({message:"login successful", token:token, success:true})
+        }else{
+            res.json({message:"user not found", success:false})
+        }
+    }catch(e:any){
+        res.json({message:e.message, success:false})
+    }
+})
+
+
+app.post('/save-workflow', Auth, async (req,res)=>{
     const workflow =(req.body);
-    
-   
+    const id = req.id as string   
    try{
     await workflowModel.create({
+        title:"my firtt workflow",
+        userID: id,
         nodes:workflow.Nodes,
         edges:workflow.Edges
     })
@@ -46,6 +69,15 @@ app.post('/save-workflow',async (req,res)=>{
 })
 
 
+app.get('/workflows', Auth, async  (req,res)=>{
+    const id  = req.id as string
+    try{
+        const workflows = await workflowModel.find({userID:id})
+        res.json({message:"my all workflows", success:true, workflows})
 
+    }catch(e:any){
+        console.error(e.message)
+}
+} )
 
 app.listen(8000)

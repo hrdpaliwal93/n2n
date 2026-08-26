@@ -31,6 +31,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         {
           headers: {
             "content-type": "application/json",
+            "Authorization":"Bearer eyJhbGciOiJIUzI1NiJ9.NmE4ZWEyZGNhMzQxNGFjZDI0ZmI0YzJk.jN85HRfiLQiiX8eQLw-rj15yUsNDvR2KvlkkuDXTUNc"
           },
         }
       )
