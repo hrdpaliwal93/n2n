@@ -1,21 +1,41 @@
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button"
+import { useNavigate } from "react-router-dom"
+import { useAppContext } from "@/context/appcontext"
 
+export default function Home() {
+  const navigate = useNavigate()
+  const { user } = useAppContext()
 
-export default function Home(){
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen space-y-6">
 
-    const  navigate = useNavigate()
-function handler(){
-  navigate('/create-workflow')
-}
-
-
-
-    return <div className="flex justify-center">
-        <h1>welcome to n2n ! </h1>
-     <div className="mt-10">
-    <Button className="cursor-pointer" 
-    variant={"default"} size={"default"} onClick={handler}>create workflow</Button>
-     </div>
+      <h1 className="text-4xl font-extrabold text-gray-800 dark:text-white">Welcome to n2n!</h1>
+      <div className="flex gap-4">
+        {user ? (
+          <>
+            <Button 
+              className="cursor-pointer" 
+              onClick={() => navigate('/create-workflow')}
+            >
+              Create Workflow
+            </Button>
+            <Button 
+              variant="outline" 
+              className="cursor-pointer" 
+              onClick={() => navigate("/dashboard")}
+            >
+              Dashboard
+            </Button>
+          </>
+        ) : (
+          <Button 
+            className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white" 
+            onClick={() => navigate("/login")}
+          >
+            Log In / Sign Up
+          </Button>
+        )}
+      </div>
     </div>
+  )
 }

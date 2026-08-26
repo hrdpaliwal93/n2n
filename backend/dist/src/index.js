@@ -29,7 +29,8 @@ app.post('/login', async (req, res) => {
         const user = await userModel.findOne({ username, password });
         if (user) {
             const token = jwt.sign(user._id.toString(), "thismyjsownwentokensecret");
-            res.json({ message: "login successful", token: token, success: true });
+            const userdetails = { username, id: user._id };
+            res.json({ message: "login successful", token: token, success: true, userdetails });
         }
         else {
             res.json({ message: "user not found", success: false });

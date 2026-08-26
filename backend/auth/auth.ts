@@ -1,5 +1,5 @@
 import type { NextFunction , Request, Response} from "express";
-import jwt from 'jsonwebtoken'
+import jwt, { type JwtPayload } from 'jsonwebtoken'
 
 export default function Auth(req:Request,res:Response,next:NextFunction){
    try{
@@ -8,12 +8,12 @@ export default function Auth(req:Request,res:Response,next:NextFunction){
         res.json({message:"token required!", success:false})
         return ;
     }
-    const decodeddata = jwt.verify(token, "thismyjsownwentokensecret") as string
+    const decodeddata = jwt.verify(token, "thismyjsownwentokensecret") as JwtPayload
     if(!decodeddata){
         res.json({message:"invalid or expired token", success:false}) 
         return 
     }
-    req.id = decodeddata
+    req.id = decodeddata.id
     next();
 
 
