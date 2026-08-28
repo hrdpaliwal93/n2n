@@ -48,11 +48,6 @@ export default function CreateWorkFlow() {
         nodeTypes={nodetypes}
         onNodeClick={(event, node) => {setSelectedNode(node)}}
          deleteKeyCode={['Backspace', 'Delete']}
-       
-      
-        //delete an edge on clicking it and then presing delete key 
-
-
         fitView
         colorMode="system"
         
@@ -60,7 +55,6 @@ export default function CreateWorkFlow() {
         <Background />
         <Controls />
         <MiniMap />
-
       </ReactFlow>
 
       {selectedNode && (

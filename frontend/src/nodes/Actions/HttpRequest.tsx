@@ -1,6 +1,6 @@
 import { Position, Handle } from '@xyflow/react';
 import { useState } from 'react';
-import type { NodeTypes } from '@/pages/CreateWorkFlow';
+import type { NodeTypes } from '@/types/types';
 import { useAppContext } from '@/context/appcontext';
 import { Button } from '@/components/ui/button';
 
