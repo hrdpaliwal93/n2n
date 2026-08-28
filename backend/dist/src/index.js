@@ -24,6 +24,7 @@ app.post('/signup', async (req, res) => {
     }
 });
 app.post('/login', async (req, res) => {
+    const wait = await new Promise((resolve) => setTimeout(resolve, 10000));
     const { username, password } = req.body;
     try {
         const user = await userModel.findOne({ username, password });

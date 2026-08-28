@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
 import { useAppContext } from "@/context/appcontext"
-import Navbar from "@/components/Navbar"
+
 
 
 export default function Home() {
