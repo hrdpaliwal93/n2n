@@ -1,4 +1,4 @@
-import { createContext, useContext,  useState, type ReactNode } from "react"
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
 import { useNavigate, type NavigateFunction } from "react-router-dom"
 import { type NodeTypes, type EdgeTypes } from "@/pages/CreateWorkFlow"
 import axios from 'axios'
@@ -10,10 +10,13 @@ interface AppContextType {
   setEdges: React.Dispatch<React.SetStateAction<EdgeTypes[]>>;
   navigate: NavigateFunction;
   saveWorkflow: () => Promise<void>;
-  user:string,
-  setUser: React.Dispatch<React.SetStateAction<string>>
-  token:string,
-  setToken: React.Dispatch<React.SetStateAction<string>>
+  user: string,
+  setUser: React.Dispatch<React.SetStateAction<string>>,
+  password: string,
+  setPassword: React.Dispatch<React.SetStateAction<string>>
+  token: string,
+  setToken: React.Dispatch<React.SetStateAction<string>>,
+  logout:()=>void
 }
 
 const AppContext = createContext<AppContextType | null>(null)
@@ -22,8 +25,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
   const [nodes, setNodes] = useState<NodeTypes[]>([])
   const [edges, setEdges] = useState<EdgeTypes[]>([])
-  const [user, setUser] = useState("")
-  const [token, setToken] = useState("")
+  const [user, setUser] = useState(()=>localStorage.getItem('user')|| "")
+  const [password, setPassword] = useState("")
+  const [token, setToken] = useState(()=>localStorage.getItem('token')|| "")
+
+
+
+
+ function logout () {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    setUser("")
+    setPassword("")
+    setToken("")
+    navigate('/')
+  }
 
   async function saveWorkflow() {
     const workflow = {
@@ -36,8 +52,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         workflow,
         {
           headers: {
-            "content-type": "application/json",
-            "Authorization": ""
+            "Authorization": `Bearer ${token}`
           },
         }
       )
@@ -53,7 +68,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
 
 
-  const value = { nodes, setNodes, edges, setEdges, navigate, saveWorkflow , user, setUser, token, setToken}
+  const value = { nodes, setNodes, logout, edges, setEdges, navigate, saveWorkflow, user, setUser, token, setToken ,password, setPassword}
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }
