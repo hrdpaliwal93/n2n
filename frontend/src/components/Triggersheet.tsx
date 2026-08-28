@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Triggers, Actions, Conditions } from "@/nodes/nodelist"
+
 import {
   Sheet,
   SheetClose,
@@ -16,7 +16,7 @@ import { useAppContext } from "@/context/appcontext"
 
 export default function Triggersheet() {
 
-  const { setNodes , setEdges, saveWorkflow} = useAppContext()
+  const { setNodes , setEdges, saveWorkflow, nodeList} = useAppContext()
 
 
   function createNodeHandler(category: string, label: string, type:string) {
@@ -33,14 +33,21 @@ export default function Triggersheet() {
       },
     ])
   }
-
+const triggers = nodeList.filter((node)=>node.category=="trigger")
+const actions = nodeList.filter((node)=>node.category=="action")
+const conditions = nodeList.filter((node)=>node.category=="condition")
 
   return (
+    
     <Sheet >
+      
       <SheetTrigger render={<Button variant="outline">Add Node</Button>} />
       <Button variant="destructive" onClick={() => {setNodes([]); setEdges([])}}>Clear Workflow</Button>
       <Button variant="default" onClick={saveWorkflow}>Save Workflow</Button>
       <SheetContent className={"overflow-y-scroll"}>
+        {
+        
+}
 
         <SheetHeader>
           <SheetTitle>select Trigger</SheetTitle>
@@ -51,7 +58,7 @@ export default function Triggersheet() {
         <div className="flex flex-col px-2 gap-4">
           {
 
-            Triggers.map((element) => (
+            triggers.map((element) => (
               <div onClick={() => createNodeHandler("trigger", element.name, element.type)}
                 className="cursor-pointer border-1 border-black rounded-lg p-2 hover:bg-muted/50" key={element.name}> {element.name}<p>{element.description}</p></div>
             ))
@@ -69,7 +76,7 @@ export default function Triggersheet() {
         <div className="flex flex-col px-2 gap-4">
           {
 
-            Actions.map((element) => (
+            actions.map((element) => (
               <div onClick={() => createNodeHandler("action", element.name, element.type)}
                 className="cursor-pointer border-1 border-black rounded-lg p-2 hover:bg-muted/50" key={element.name}> {element.name}<p>{element.description}</p></div>
             ))
@@ -85,7 +92,7 @@ export default function Triggersheet() {
         <div className="flex flex-col px-2 gap-4">
           {
 
-            Conditions.map((element) => (
+            conditions.map((element) => (
               <div onClick={() => createNodeHandler("condition", element.name, element.type)}
                 className="cursor-pointer border-1 border-black rounded-lg p-2 hover:bg-muted/50" key={element.name}> {element.name}<p>{element.description}</p></div>
             ))

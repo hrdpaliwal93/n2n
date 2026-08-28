@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, type ReactNode } from "react"
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
 import { useNavigate, type NavigateFunction } from "react-router-dom"
-import { type NodeTypes, type EdgeTypes } from "@/pages/CreateWorkFlow"
+import { type NodeTypes, type EdgeTypes , type nodeDefineSchema} from "../types/types"
 import axios from 'axios'
+
 
 interface AppContextType {
   nodes: NodeTypes[];
@@ -16,10 +17,15 @@ interface AppContextType {
   setPassword: React.Dispatch<React.SetStateAction<string>>
   token: string,
   setToken: React.Dispatch<React.SetStateAction<string>>,
-  logout:()=>void
+  logout:()=>void,
+  nodeList:nodeDefineSchema[] ,
+  setNodeList: React.Dispatch<React.SetStateAction<nodeDefineSchema[]>>|[],
+
 }
 
 const AppContext = createContext<AppContextType | null>(null)
+
+
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
@@ -28,8 +34,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState(()=>localStorage.getItem('user')|| "")
   const [password, setPassword] = useState("")
   const [token, setToken] = useState(()=>localStorage.getItem('token')|| "")
+  const [nodeList, setNodeList] = useState<nodeDefineSchema[]>([])
 
 
+async function fetchNodes(){
+const nodesList = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/nodes`, {
+  headers:{
+    "Content-Type":"application/json",
+    
+  }
+})
+setNodeList(nodesList.data.nodesList)
+}
+
+useEffect(()=>{
+ fetchNodes()
+},[])
 
 
  function logout () {
@@ -68,7 +88,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
 
 
-  const value = { nodes, setNodes, logout, edges, setEdges, navigate, saveWorkflow, user, setUser, token, setToken ,password, setPassword}
+  const value = { nodes, setNodes, logout, edges, setEdges, nodeList,setNodeList,  navigate, saveWorkflow, user, setUser, token, setToken ,password, setPassword}
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }

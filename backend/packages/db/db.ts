@@ -19,16 +19,15 @@ const workflowSchema = new mongoose.Schema({
 
 
 const nodeDefineSchema = new mongoose.Schema({
-    category:{type:String, enum:["trigger", "action", "condition"]},
-    type:String,
-    name:String,
-    description:String,
-   
-    
+    category: { type: String, enum: ["trigger", "action", "condition"] },
+    type: String,
+    name: String,
+    description: String,
 })
 
 
 const userModel = mongoose.model("User", userSchema)
+
 const workflowModel = mongoose.model("Workflow", workflowSchema)
 const nodeModel= mongoose.model("Node", nodeDefineSchema)
 

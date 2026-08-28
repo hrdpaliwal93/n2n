@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { userModel, workflowModel } from '../packages/db/db.js';
+import { nodeModel, userModel, workflowModel } from '../packages/db/db.js';
 import jwt from 'jsonwebtoken';
 import Auth from '../auth/auth.js';
 const app = express();
@@ -24,7 +24,6 @@ app.post('/signup', async (req, res) => {
     }
 });
 app.post('/login', async (req, res) => {
-    const wait = await new Promise((resolve) => setTimeout(resolve, 10000));
     const { username, password } = req.body;
     try {
         const user = await userModel.findOne({ username, password });
@@ -62,6 +61,15 @@ app.get('/workflows', Auth, async (req, res) => {
     try {
         const workflows = await workflowModel.find({ userID: id });
         res.json({ message: "my all workflows", success: true, workflows });
+    }
+    catch (e) {
+        console.error(e.message);
+    }
+});
+app.get('/nodes', async (req, res) => {
+    try {
+        const nodesList = await nodeModel.find();
+        res.json({ message: "my all workflows", success: true, nodesList });
     }
     catch (e) {
         console.error(e.message);

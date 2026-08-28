@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 
-import {userModel, workflowModel} from '../packages/db/db.js'
+import {nodeModel, userModel, workflowModel} from '../packages/db/db.js'
 import jwt from 'jsonwebtoken'
 import Auth from '../auth/auth.js'
 const app = express()
@@ -70,11 +70,22 @@ app.post('/save-workflow', Auth, async (req,res)=>{
 })
 
 
-app.get('/workflows', Auth, async  (req,res)=>{
+app.get('/workflows', Auth,  async  (req,res)=>{
     const id  = req.id as string
     try{
         const workflows = await workflowModel.find({userID:id})
         res.json({message:"my all workflows", success:true, workflows})
+
+    }catch(e:any){
+        console.error(e.message)
+}
+} )
+
+app.get('/nodes',  async  (req,res)=>{
+    
+    try{
+        const nodesList = await nodeModel.find()
+        res.json({message:"my all workflows", success:true, nodesList})
 
     }catch(e:any){
         console.error(e.message)

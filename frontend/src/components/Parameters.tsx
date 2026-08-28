@@ -8,7 +8,7 @@ import {
     SheetTitle,
 } from "@/components/ui/sheet"
 import { Button } from "./ui/button"
-import type { NodeTypes } from "@/pages/CreateWorkFlow";
+import type { NodeTypes } from "@/types/types";
 import { useAppContext } from "@/context/appcontext";
 import { HttpRequestParams } from "@/nodes/Actions/HttpRequest";
 import {AIChatParams }from "@/nodes/Actions/AIChatResponse";
