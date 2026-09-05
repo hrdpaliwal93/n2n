@@ -1,5 +1,5 @@
 import { Handle, Position } from "@xyflow/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useAppContext } from "@/context/appcontext";
 import type { NodeTypes } from "@/types/types";
@@ -39,6 +39,8 @@ export default function AIChatResponse() {
   );
 }
 
+
+
 export function AIChatParams({ node }: { node?: NodeTypes }) {
 
   const { setNodes } = useAppContext();
@@ -48,10 +50,17 @@ export function AIChatParams({ node }: { node?: NodeTypes }) {
 
   const aichatparams:aichatparams = {
         prompt:prompt,
-        modelprovider: modelprovider,
+        modelprovider: modelprovider as  "GET"|"POST"|"DELETE"|"PUT"|"PATCH",
         apikey:apikey
 
   }
+
+  useEffect(() => {
+    const meta = (node?.data?.metadata as aichatparams) || {};
+    setPrompt(meta.prompt || "");
+    setApikey(meta.apikey || "");
+    setModelProvider(meta.modelprovider || "gemini");
+  }, [node?.id, node?.data?.metadata]);
 
  function handleSaveNodeData() {
     if (!node) return;

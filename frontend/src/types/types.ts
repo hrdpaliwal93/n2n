@@ -44,9 +44,20 @@ export interface aichatparams extends Record<string,unknown> {
 export interface httprequestparams extends Record<string,unknown> {
   body?:  Record<string, unknown> ,
   input?:  Record<string, unknown>,
-  output?: Record<string, unknown>,
-  method: string, enum: ["GET", "POST", "DELETE", "PUT", "PATCH"] ,
+  response?: Record<string, unknown>,
+  method: "GET"|"POST"|"DELETE"|"PUT"|"PATCH",
   url:  string ,
   headers: Record<string, unknown> ,
+  
    
 }
+
+export interface emailparams extends Record<string,unknown> {
+ to:string,
+ from:string,
+ subject:string,
+ messagebody:string
+  
+   
+}
+

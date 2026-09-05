@@ -11,6 +11,7 @@ import AIChatResponse from '@/nodes/Actions/AIChatResponse';
 import Parameters from '@/components/Parameters';
 import HttpRequest from '@/nodes/Actions/HttpRequest';
 import ifElse from '@/nodes/conditions/ifElse';
+import Email from '@/nodes/Actions/Email';
 import { type NodeTypes,type  EdgeTypes } from '@/types/types';
 
 
@@ -20,7 +21,8 @@ const nodetypes = {
   schedule:Schedule,
   httprequest:HttpRequest,
   aichat:AIChatResponse,
-  ifelse:ifElse
+  ifelse:ifElse,
+  email:Email
 }
 
 

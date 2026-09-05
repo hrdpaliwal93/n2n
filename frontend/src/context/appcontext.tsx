@@ -27,6 +27,16 @@ const AppContext = createContext<AppContextType | null>(null)
 
 
 
+const DEFAULT_NODES: nodeDefineSchema[] = [
+  { category: "trigger", type: "formsubmit", name: "Form Submit", description: "Triggers on HTML form submission" },
+  { category: "trigger", type: "manual", name: "Manual Trigger", description: "Trigger workflow manually" },
+  { category: "trigger", type: "schedule", name: "Schedule", description: "Trigger on a recurring schedule" },
+  { category: "action", type: "httprequest", name: "HTTP Request", description: "Send an HTTP request" },
+  { category: "action", type: "aichat", name: "AI Chat", description: "Generate AI response" },
+  { category: "action", type: "email", name: "Send Email", description: "Send an email with To, From, Subject, and Body" },
+  { category: "condition", type: "ifelse", name: "If / Else", description: "Conditional branch logic" },
+];
+
 export function AppProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
   const [nodes, setNodes] = useState<NodeTypes[]>([])
@@ -34,17 +44,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState(()=>localStorage.getItem('user')|| "")
   const [password, setPassword] = useState("")
   const [token, setToken] = useState(()=>localStorage.getItem('token')|| "")
-  const [nodeList, setNodeList] = useState<nodeDefineSchema[]>([])
+  const [nodeList, setNodeList] = useState<nodeDefineSchema[]>(DEFAULT_NODES)
 
 
 async function fetchNodes(){
-const nodesList = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/nodes`, {
-  headers:{
-    "Content-Type":"application/json",
-    
+  try {
+    const nodesList = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/nodes`, {
+      headers:{
+        "Content-Type":"application/json",
+      }
+    })
+    if (nodesList.data?.nodesList?.length > 0) {
+      const fetched: nodeDefineSchema[] = nodesList.data.nodesList;
+      const hasEmail = fetched.some((n) => n.type === "email");
+      if (!hasEmail) {
+        fetched.push({ category: "action", type: "email", name: "Send Email", description: "Send an email with To, From, Subject, and Body" });
+      }
+      setNodeList(fetched);
+    }
+  } catch {
+    // fallback to DEFAULT_NODES
   }
-})
-setNodeList(nodesList.data.nodesList)
 }
 
 useEffect(()=>{

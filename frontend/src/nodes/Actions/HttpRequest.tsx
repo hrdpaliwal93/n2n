@@ -1,9 +1,9 @@
 import { Position, Handle } from '@xyflow/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { NodeTypes } from '@/types/types';
 import { useAppContext } from '@/context/appcontext';
 import { Button } from '@/components/ui/button';
-import { type httprequestparams} from '@/types/types';
+import { type httprequestparams } from '@/types/types';
 
 export default function httprequest() {
   return <div className="bg-white dark:bg-slate-900 border-2 border-purple-500 rounded-xl p-3.5 shadow-md min-w-[220px] text-slate-900 dark:text-slate-100">
@@ -28,40 +28,76 @@ export default function httprequest() {
       className="!w-3 !h-3 !bg-purple-500 !border-2 !border-white dark:!border-slate-900"
     />
 
-      <Handle type="target"  className="!w-3 !h-3 !bg-purple-500 !border-2 !border-white dark:!border-slate-900" position={Position.Left} />
+    <Handle type="target" className="!w-3 !h-3 !bg-purple-500 !border-2 !border-white dark:!border-slate-900" position={Position.Left} />
   </div>
 }
 
 
 export function HttpRequestParams({ node }: { node: NodeTypes }) {
+  const { setNodes } = useAppContext();
 
-  const { setNodes } = useAppContext()
-  const [method, setMethod] = useState("GET");
-  const [url, setUrl] = useState("");
-  const [headers, setHeaders] = useState<Record<string, unknown>>({});
-  const [body, setBody] = useState<Record<string, unknown>>({});
+  const metadata = (node?.data?.metadata as httprequestparams);
 
-  const httprequestparams:httprequestparams= {
+  const [method, setMethod] = useState<string>(metadata.method || "GET");
+  const [url, setUrl] = useState<string>(metadata.url || "");
+  const [headerstext, setheaderstext] = useState<string>(
+    metadata.headers ? JSON.stringify(metadata.headers, null, 2) : ""
+  );
+  const [bodytext, setbodytext] = useState<string>(
+    metadata.body ? JSON.stringify(metadata.body, null, 2) : ""
+  );
 
-  }
+  useEffect(() => {
+    const meta = (node?.data?.metadata as httprequestparams) ;
+    setMethod(meta.method || "GET");
+    setUrl(meta.url || "");
+    setheaderstext(meta.headers ? JSON.stringify(meta.headers, null, 2) : "");
+    setbodytext(meta.body ? JSON.stringify(meta.body, null, 2) : "");
+  }, [node?.id, node?.data?.metadata]);
 
   function handleSave() {
+    let parsedHeaders: Record<string, unknown> = {};
+    let parsedBody: Record<string, unknown> = {};
+
+    try {
+      if (headerstext.trim()) parsedHeaders = JSON.parse(headerstext);
+    } catch {
+      headerstext.split("\n").forEach((line) => {
+        const [k, v] = line.split(":");
+        if (k && v) parsedHeaders[k.trim()] = v.trim();
+      });
+    }
+
+    try {
+      if (bodytext.trim()) parsedBody = JSON.parse(bodytext);
+    } catch {
+      bodytext.split("\n").forEach((line) => {
+        const [k, v] = line.split(":");
+        if (k && v) parsedBody[k.trim()] = v.trim();
+      });
+    }
+
+    const updatedParams: httprequestparams = {
+      method: method as "GET" | "POST" | "DELETE" | "PUT" | "PATCH",
+      url,
+      headers: parsedHeaders,
+      body: parsedBody,
+    };
 
     setNodes((previousNodes) =>
       previousNodes.map((n) =>
         n.id === node.id
           ? {
-            ...n,
-            data: {
-              ...n.data,
-              metadata:httprequestparams
-            },
-          }
+              ...n,
+              data: {
+                ...n.data,
+                metadata: updatedParams,
+              },
+            }
           : n
       )
     );
     alert("Parameters saved successfully!");
-
   }
 
   return (
@@ -70,47 +106,52 @@ export function HttpRequestParams({ node }: { node: NodeTypes }) {
 
       <div>
         <label className="text-xs font-semibold block mb-1">Method</label>
-        <select onChange={(e) => setMethod(e.target.value)}
-          className="w-full border rounded-md p-2 text-sm bg-background">
-          <option>GET</option>
-          <option>POST</option>
-          <option>PUT</option>
-          <option>DELETE</option>
-          <option>PATCH</option>
+        <select
+          onChange={(e) => setMethod(e.target.value)}
+          value={method}
+          className="w-full border rounded-md p-2 text-sm bg-background"
+        >
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="DELETE">DELETE</option>
+          <option value="PATCH">PATCH</option>
         </select>
       </div>
 
       <div>
         <label className="text-xs font-semibold block mb-1">URL</label>
-        <input onChange={(e) => setUrl(e.target.value)}
-          type="text" placeholder="https://api.example.com" className="w-full border rounded-md p-2 text-sm bg-background" />
+        <input
+          onChange={(e) => setUrl(e.target.value)}
+          value={url}
+          type="text"
+          placeholder="https://api.example.com"
+          className="w-full border rounded-md p-2 text-sm bg-background"
+        />
       </div>
 
       <div>
         <label className="text-xs font-semibold block mb-1">Headers</label>
-        <input onChange={(e) => {
-          const final = JSON.parse(e.target.value)
-          setHeaders(final)
-        }}
-          type="text" placeholder="e.g. Authorization: Bearer token" className="w-full border rounded-md p-2 text-sm bg-background" />
+        <textarea
+          value={headerstext}
+          onChange={(e) => setheaderstext(e.target.value)}
+          placeholder='{"Content-Type": "application/json"}'
+          className="w-full border rounded-md p-2 text-sm bg-background h-20 font-mono text-xs"
+        />
       </div>
 
       <div>
         <label className="text-xs font-semibold block mb-1">Body</label>
         <textarea
-          onChange={(e) => {
-
-            const final = JSON.parse(e.target.value)
-            setBody(final)
-          }}
-          placeholder='{ "key": "value" }' className="w-full border rounded-md p-2 text-sm bg-background h-24 font-mono text-xs" />
+          value={bodytext}
+          onChange={(e) => setbodytext(e.target.value)}
+          placeholder='{ "key": "value" }'
+          className="w-full border rounded-md p-2 text-sm bg-background h-24 font-mono text-xs"
+        />
       </div>
 
-
-      <Button variant='default' onClick={handleSave} className="w-full mt-2">
+      <Button variant="default" onClick={handleSave} className="w-full mt-2">
         Save Parameters
-
-
       </Button>
     </div>
   );

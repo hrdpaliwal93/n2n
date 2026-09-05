@@ -12,13 +12,15 @@ import type { NodeTypes } from "@/types/types";
 import { useAppContext } from "@/context/appcontext";
 import { HttpRequestParams } from "@/nodes/Actions/HttpRequest";
 import {AIChatParams }from "@/nodes/Actions/AIChatResponse";
-import {formsubmitparams} from "@/nodes/Triggers/Formsubmit"
+import {formsubmitparams} from "@/nodes/Triggers/Formsubmit";
+import { EmailParams } from "@/nodes/Actions/Email";
 
 // Parameter Form Registry Map
 const PARAM_COMPONENTS: Record<string, React.ComponentType<{ node: NodeTypes }>> = {
     httprequest: HttpRequestParams,
     aichat: AIChatParams,
-    formsubmit:formsubmitparams
+    formsubmit: formsubmitparams,
+    email: EmailParams
 };
 
 export default function Parameters({ node, onClose }: { node: NodeTypes, onClose: () => void }) {
