@@ -20,7 +20,7 @@ const PARAM_COMPONENTS: Record<string, React.ComponentType<{ node: NodeTypes }>>
     httprequest: HttpRequestParams,
     aichat: AIChatParams,
     formsubmit: formsubmitparams,
-    email: EmailParams
+    sendemail: EmailParams
 };
 
 export default function Parameters({ node, onClose }: { node: NodeTypes, onClose: () => void }) {

@@ -33,7 +33,7 @@ export interface formSubmit {
 export interface aichatparams extends Record<string,unknown> {
   body?:  Record<string, unknown> ,
   input?:  Record<string, unknown>,
-  output?: Record<string, unknown>,
+  response:string,
   prompt?:  string ,
 
   modelprovider?:string,

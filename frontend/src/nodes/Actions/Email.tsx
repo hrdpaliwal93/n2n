@@ -1,5 +1,5 @@
 import { Handle, Position } from "@xyflow/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAppContext } from "@/context/appcontext";
 import type { NodeTypes, emailparams } from "@/types/types";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ export default function Email() {
 export function EmailParams({ node }: { node?: NodeTypes }) {
   const { setNodes } = useAppContext();
 
-  const initialMetadata = (node?.data?.metadata as emailparams) || {};
+  const initialMetadata = (node?.data?.metadata as emailparams);
 
   const [to, setTo] = useState<string>(initialMetadata.to || "");
   const [from, setFrom] = useState<string>(initialMetadata.from || "");
@@ -48,7 +48,7 @@ export function EmailParams({ node }: { node?: NodeTypes }) {
   const [messagebody, setMessagebody] = useState<string>(initialMetadata.messagebody || "");
 
   useEffect(() => {
-    const meta = (node?.data?.metadata as emailparams) || {};
+    const meta = (node?.data?.metadata as emailparams) ;
     setTo(meta.to || "");
     setFrom(meta.from || "");
     setSubject(meta.subject || "");

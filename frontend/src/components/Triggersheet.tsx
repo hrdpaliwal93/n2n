@@ -81,7 +81,7 @@ const conditions = nodeList.filter((node)=>node.category=="condition")
           {
 
             actions.map((element) => (
-              <div onClick={() => createNodeHandler("action", element.name, element.type)}
+              <div   onClick={() => createNodeHandler("action", element.name, element.type)}
                 className="cursor-pointer border-1 border-black rounded-lg p-2 hover:bg-muted/50" key={element.name}> {element.name}<p>{element.description}</p></div>
             ))
 

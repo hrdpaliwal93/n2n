@@ -47,16 +47,18 @@ export function AIChatParams({ node }: { node?: NodeTypes }) {
   const [modelprovider, setModelProvider] = useState("");
   const [apikey, setApikey] = useState("");
   const [prompt, setPrompt] = useState("");
+  const [response, setresponse] = useState("");
 
   const aichatparams:aichatparams = {
         prompt:prompt,
         modelprovider: modelprovider as  "GET"|"POST"|"DELETE"|"PUT"|"PATCH",
-        apikey:apikey
+        apikey:apikey,
+        response
 
   }
 
   useEffect(() => {
-    const meta = (node?.data?.metadata as aichatparams) || {};
+    const meta = (node?.data?.metadata as aichatparams);
     setPrompt(meta.prompt || "");
     setApikey(meta.apikey || "");
     setModelProvider(meta.modelprovider || "gemini");
@@ -132,8 +134,18 @@ export function AIChatParams({ node }: { node?: NodeTypes }) {
           className="w-1/2"
         >
           Save Node
-        </Button>
+        </Button>       
       </div>
+      <div>
+        <label className="text-xs font-semibold block mb-1">Response</label>
+        <textarea
+          value={response}
+          
+          placeholder="Response from AI"
+          className="w-full border rounded-md p-2 text-sm bg-background h-24"
+        />
+      </div>
+
 
 
     </div>

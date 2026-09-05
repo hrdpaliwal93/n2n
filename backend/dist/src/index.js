@@ -69,7 +69,7 @@ app.get('/workflows', Auth, async (req, res) => {
 app.get('/nodes', async (req, res) => {
     try {
         const nodesList = await nodeModel.find();
-        res.json({ message: "my all workflows", success: true, nodesList });
+        res.json({ message: "all nodes", success: true, nodesList });
     }
     catch (e) {
         console.error(e.message);

@@ -22,7 +22,7 @@ const nodetypes = {
   httprequest:HttpRequest,
   aichat:AIChatResponse,
   ifelse:ifElse,
-  email:Email
+  sendemail:Email
 }
 
 
