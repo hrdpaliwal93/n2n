@@ -1,9 +1,10 @@
 import { Handle, Position } from "@xyflow/react";
 import { useState } from "react";
-import axios from "axios";
+
 import { useAppContext } from "@/context/appcontext";
-import type { NodeTypes } from "@/pages/CreateWorkFlow";
+import type { NodeTypes } from "@/types/types";
 import { Button } from "@/components/ui/button";
+import type { aichatparams } from "@/types/types";
 
 export default function AIChatResponse() {
   return (
@@ -39,35 +40,19 @@ export default function AIChatResponse() {
 }
 
 export function AIChatParams({ node }: { node?: NodeTypes }) {
+
   const { setNodes } = useAppContext();
-  const [model, setModel] = useState(node?.data?.method || "groq");
-  const [api, setApi] = useState("");
+  const [modelprovider, setModelProvider] = useState("");
+  const [apikey, setApikey] = useState("");
   const [prompt, setPrompt] = useState("");
-  const [aiResponse, setAiResponse] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
 
-  async function handleSendAIRequest() {
-    if (!api.trim()) {
-      setErrorMsg("Please enter your API Key");
-      return;
-    }
-    if (!prompt.trim()) {
-      setErrorMsg("Please enter a prompt");
-      return;
-    }
+  const aichatparams:aichatparams = {
+        prompt:prompt,
+        modelprovider: modelprovider,
+        apikey:apikey
 
-    setLoading(true);
-    setErrorMsg("");
-    setAiResponse("");
-
-    try {
-        //send response to my server and wait for response
-    }catch(e){
-        setErrorMsg(e.message)
-        setLoading(false)
-    }
   }
+
  function handleSaveNodeData() {
     if (!node) return;
     setNodes((prevNodes) =>
@@ -77,9 +62,7 @@ export function AIChatParams({ node }: { node?: NodeTypes }) {
               ...n,
               data: {
                 ...n.data,
-                model: model,
-                api: api,
-                body: { prompt, response: aiResponse }
+               metadata:aichatparams
               }
             }
           : n
@@ -96,8 +79,8 @@ export function AIChatParams({ node }: { node?: NodeTypes }) {
       <div>
         <label className="text-xs font-semibold block mb-1">Model Provider</label>
         <select
-          value={model}
-          onChange={(e) => setModel(e.target.value)}
+          value={modelprovider}
+          onChange={(e) => setModelProvider(e.target.value)}
           className="w-full border rounded-md p-2 text-sm bg-background"
         >
           <option value="gemini">Google Gemini (gemini-1.5-flash)</option>
@@ -111,8 +94,8 @@ export function AIChatParams({ node }: { node?: NodeTypes }) {
         <label className="text-xs font-semibold block mb-1">API Key</label>
         <input
           type="password"
-          value={api}
-          onChange={(e) => setApi(e.target.value)}
+          value={apikey}
+          onChange={(e) => setApikey(e.target.value)}
           placeholder="Enter your API key..."
           className="w-full border rounded-md p-2 text-sm bg-background font-mono"
         />
@@ -129,22 +112,10 @@ export function AIChatParams({ node }: { node?: NodeTypes }) {
         />
       </div>
 
-      {errorMsg && (
-        <p className="text-xs text-red-500 font-medium">⚠️ {errorMsg}</p>
-      )}
 
       {/* Action Buttons */}
       <div className="flex gap-2">
-        <Button
-          
-          variant="secondary"
-          onClick={handleSendAIRequest}
-          disabled={loading}
-          className="w-1/2"
-        >
-          {loading ? "Sending..." : "Test Request"}
-        </Button>
-
+       
         <Button
           type="button"
           variant="default"
@@ -155,17 +126,7 @@ export function AIChatParams({ node }: { node?: NodeTypes }) {
         </Button>
       </div>
 
-      {/* AI Response Display */}
-      {aiResponse && (
-        <div className="mt-3 p-3 bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 rounded-md">
-          <label className="text-xs font-bold text-purple-700 dark:text-purple-300 block mb-1">
-            🤖 AI Response:
-          </label>
-          <p className="text-xs text-slate-800 dark:text-slate-200 whitespace-pre-wrap">
-            {aiResponse}
-          </p>
-        </div>
-      )}
+
     </div>
   );
 }

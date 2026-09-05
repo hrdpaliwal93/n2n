@@ -3,7 +3,7 @@ import { useState } from 'react';
 import type { NodeTypes } from '@/types/types';
 import { useAppContext } from '@/context/appcontext';
 import { Button } from '@/components/ui/button';
-
+import { type httprequestparams} from '@/types/types';
 
 export default function httprequest() {
   return <div className="bg-white dark:bg-slate-900 border-2 border-purple-500 rounded-xl p-3.5 shadow-md min-w-[220px] text-slate-900 dark:text-slate-100">
@@ -41,6 +41,9 @@ export function HttpRequestParams({ node }: { node: NodeTypes }) {
   const [headers, setHeaders] = useState<Record<string, unknown>>({});
   const [body, setBody] = useState<Record<string, unknown>>({});
 
+  const httprequestparams:httprequestparams= {
+
+  }
 
   function handleSave() {
 
@@ -51,10 +54,7 @@ export function HttpRequestParams({ node }: { node: NodeTypes }) {
             ...n,
             data: {
               ...n.data,
-              method,
-              url,
-              headers,
-              body: body,
+              metadata:httprequestparams
             },
           }
           : n
@@ -76,6 +76,7 @@ export function HttpRequestParams({ node }: { node: NodeTypes }) {
           <option>POST</option>
           <option>PUT</option>
           <option>DELETE</option>
+          <option>PATCH</option>
         </select>
       </div>
 

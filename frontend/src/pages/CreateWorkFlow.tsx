@@ -14,8 +14,6 @@ import ifElse from '@/nodes/conditions/ifElse';
 import { type NodeTypes,type  EdgeTypes } from '@/types/types';
 
 
-
-
 const nodetypes = {
   formsubmit:Formsubmit,
   manual:Manual,
@@ -24,8 +22,10 @@ const nodetypes = {
   aichat:AIChatResponse,
   ifelse:ifElse
 }
+
+
 export default function CreateWorkFlow() {
-  const { nodes, setNodes, edges, setEdges } = useAppContext()
+  const { nodes, setNodes, edges, setEdges} = useAppContext()
   const [selectedNode, setSelectedNode] = useState<NodeTypes | null>(null);
 
 

@@ -86,8 +86,6 @@ useEffect(()=>{
   }
 
 
-
-
   const value = { nodes, setNodes, logout, edges, setEdges, nodeList,setNodeList,  navigate, saveWorkflow, user, setUser, token, setToken ,password, setPassword}
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>

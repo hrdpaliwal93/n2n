@@ -1,22 +1,14 @@
 export interface NodeTypes {
 
   category: "trigger" | "action" | "condition",
-  type:string,
-  input?: string | Record<string, unknown>,
-  output?: string | Record<string, unknown>,
+  type: string,
   id: string,
   position: { x: number, y: number },
-  status?:"pending"|"completed"|"failed",
   data: {
-     label: string,
-    body?:Record<string,unknown>,
-    headers?:Record<string,unknown>,
-    method?:string,
-    url?:string,
-    model?:string,
-    api?:string,
-    content?:string
-  },
+    label: string,
+    metadata: Record<string, unknown>
+  }
+
 
 }
 export interface EdgeTypes {
@@ -32,3 +24,29 @@ export interface nodeDefineSchema {
   description: string;
 }
 
+export interface formSubmit {
+
+
+
+}
+
+export interface aichatparams extends Record<string,unknown> {
+  body?:  Record<string, unknown> ,
+  input?:  Record<string, unknown>,
+  output?: Record<string, unknown>,
+  prompt?:  string ,
+
+  modelprovider?:string,
+  apikey?:  string 
+
+}
+
+export interface httprequestparams extends Record<string,unknown> {
+  body?:  Record<string, unknown> ,
+  input?:  Record<string, unknown>,
+  output?: Record<string, unknown>,
+  method: string, enum: ["GET", "POST", "DELETE", "PUT", "PATCH"] ,
+  url:  string ,
+  headers: Record<string, unknown> ,
+   
+}

@@ -28,7 +28,11 @@ export default function Triggersheet() {
 
         id: (previous.length + 1).toString(),
         position: { x: 0, y: 100 },
-        data: { label: `${label}` },
+        data: { 
+          label: `${label}` ,
+          metadata:{}
+      
+      },
 
       },
     ])
