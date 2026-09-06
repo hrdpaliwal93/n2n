@@ -2,6 +2,8 @@ export interface NodeTypes {
 
   category: "trigger" | "action" | "condition",
   type: string,
+  input?:Record<string, unknown>,
+  output?:Record<string, unknown>,
   id: string,
   position: { x: number, y: number },
   data: {

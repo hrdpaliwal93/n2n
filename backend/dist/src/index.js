@@ -75,5 +75,53 @@ app.get('/nodes', async (req, res) => {
         console.error(e.message);
     }
 });
+app.post('/execute-workflow', async (req, res) => {
+    const workflowid = req.body.workflowid;
+    try {
+        const workflow = await workflowModel.findOne({ workflowid });
+        //find a trigger node, if not return message
+        if (!workflow) {
+            res.json({ message: "worflow does not exixts", success: false });
+            return;
+        }
+        const triggernode = workflow.nodes.filter((node) => node.category == "trigger");
+        if (!triggernode) {
+            res.json({ message: "workflow should habe a trigger node", success: false });
+            return;
+        }
+        //execute this , find next node, execute that
+        const currentnode = triggernode;
+        const nextnode = workflow.edges;
+    }
+    catch (e) {
+        console.error(e);
+    }
+});
+function gettriggernode(workflow) {
+    return workflow.nodes.find((node) => node.category == "trigger");
+}
+async function executeworkflow(workflow) {
+    const triggernode = gettriggernode(workflow);
+    if (!triggernode)
+        return { messsage: "workflow should have a trigger node", success: false };
+    let queue = [triggernode.id];
+    let runData = {};
+    while (queue.length > 0) {
+        let currentnode = queue.shift();
+        let node = await nodeModel.findOne({ id: currentnode });
+        switch (node?.type) {
+            case 'aichat':
+                const data = aichatexecute(node, node.input);
+                runData[currentnode] = data;
+            case 'httprequest':
+                { }
+            case 'sendemail':
+                { }
+            default:
+        }
+        let nextedge = workflow.edges.find((edge) => edge.source == currentnode);
+        queue.push(nextedge.target);
+    }
+}
 app.listen(8000);
 //# sourceMappingURL=index.js.map
