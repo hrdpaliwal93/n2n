@@ -1,22 +1,20 @@
 export interface NodeTypes {
-
-  category: "trigger" | "action" | "condition",
-  type: string,
-  input?:Record<string, unknown>,
-  output?:Record<string, unknown>,
-  id: string,
-  position: { x: number, y: number },
+  category: "trigger" | "action" | "condition";
+  type: string;
+  input?: Record<string, unknown>;
+  output?: Record<string, unknown>;
+  id: string;
+  position: { x: number; y: number };
   data: {
-    label: string,
-    metadata: Record<string, unknown>
-  }
-
-
+    label: string;
+    metadata: Record<string, unknown>;
+  };
 }
+
 export interface EdgeTypes {
-  id: string,
-  source: string,
-  target: string
+  id: string;
+  source: string;
+  target: string;
 }
 
 export interface nodeDefineSchema {
@@ -26,40 +24,34 @@ export interface nodeDefineSchema {
   description: string;
 }
 
-export interface formSubmit {
+export interface formSubmit {}
 
-
-
+export interface aichatparams extends Record<string, unknown> {
+  body?: Record<string, unknown>;
+  input?: Record<string, unknown>;
+  response: string;
+  prompt?: string;
+  modelprovider?: string;
+  apikey?: string;
 }
 
-export interface aichatparams extends Record<string,unknown> {
-  body?:  Record<string, unknown> ,
-  input?:  Record<string, unknown>,
-  response:string,
-  prompt?:  string ,
-
-  modelprovider?:string,
-  apikey?:  string 
-
+export interface httprequestparams extends Record<string, unknown> {
+  body?: Record<string, unknown>;
+  input?: Record<string, unknown>;
+  response?: Record<string, unknown>;
+  method: "GET" | "POST" | "DELETE" | "PUT" | "PATCH";
+  url: string;
+  headers: Record<string, unknown>;
 }
 
-export interface httprequestparams extends Record<string,unknown> {
-  body?:  Record<string, unknown> ,
-  input?:  Record<string, unknown>,
-  response?: Record<string, unknown>,
-  method: "GET"|"POST"|"DELETE"|"PUT"|"PATCH",
-  url:  string ,
-  headers: Record<string, unknown> ,
-  
-   
+export interface emailparams extends Record<string, unknown> {
+  to: string;
+  from: string;
+  subject: string;
+  messagebody: string;
 }
 
-export interface emailparams extends Record<string,unknown> {
- to:string,
- from:string,
- subject:string,
- messagebody:string
-  
-   
+export interface websearchparams extends Record<string,unknown> {
+  query?: string;
+  response?: string;
 }
-

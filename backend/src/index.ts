@@ -1,5 +1,7 @@
 import express from 'express'
 import cors from 'cors'
+import { tavily }  from "@tavily/core";
+import 'dotenv/config'
 import { GoogleGenAI } from "@google/genai";
 import { nodeModel, userModel, workflowModel } from '../packages/db/db.js'
 import jwt from 'jsonwebtoken'
@@ -107,7 +109,12 @@ app.post('/execute-workflow', Auth, async (req, res) => {
             }
         }
         const result = await executeworkflow(w);
-        res.json({ message: result.success ?  "workflow saved and executed" : result.message, success: result.success? true: false, result, workflowid: w?._id });
+         res.json({ 
+        message: "workflow saved and executed", 
+        success: true, 
+        result, 
+        workflowid: w?._id 
+    });
     } catch (e: any) {
         console.error(e.message);
         res.status(500).json({ message: e.message, success: false });
@@ -140,6 +147,9 @@ async function executeworkflow(workflow: any) {
                 break;
             case 'sendemail':
                 { }
+                break;
+            case 'websearch':
+                runData[currentnode] = await websearchexecute(node)
                 break;
 
             default:
@@ -203,5 +213,22 @@ async function httprequestexecute(node: any) {
         console.error("HTTP Request Error:", err.message);
         return { error: err.response?.data || err.message };
     }
+}
+
+
+
+async function websearchexecute(node:any){
+    const { query } = node?.data?.metadata || {};
+   
+
+
+    const tvly = tavily({ apiKey: `${process.env.websearch_url}` });
+    const response = await tvly.search(
+        query,{searchDepth: "advanced",maxResults:5}
+       
+    );
+
+    return response;
+
 }
 app.listen(8000)

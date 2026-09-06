@@ -14,13 +14,15 @@ import { HttpRequestParams } from "@/nodes/Actions/HttpRequest";
 import {AIChatParams }from "@/nodes/Actions/AIChatResponse";
 import {formsubmitparams} from "@/nodes/Triggers/Formsubmit";
 import { EmailParams } from "@/nodes/Actions/Email";
+import { WebSearchParams } from "@/nodes/Actions/WebSearch";
 
 // Parameter Form Registry Map
 const PARAM_COMPONENTS: Record<string, React.ComponentType<{ node: NodeTypes }>> = {
     httprequest: HttpRequestParams,
     aichat: AIChatParams,
     formsubmit: formsubmitparams,
-    sendemail: EmailParams
+    sendemail: EmailParams,
+    websearch: WebSearchParams
 };
 
 export default function Parameters({ node, onClose }: { node: NodeTypes, onClose: () => void }) {

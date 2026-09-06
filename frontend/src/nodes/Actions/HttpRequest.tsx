@@ -33,6 +33,8 @@ export default function httprequest() {
 }
 
 
+import { toast } from 'react-toastify';
+
 export function HttpRequestParams({ node }: { node: NodeTypes }) {
    const output = node.output
   const { setNodes } = useAppContext();
@@ -98,7 +100,7 @@ export function HttpRequestParams({ node }: { node: NodeTypes }) {
           : n
       )
     );
-    alert("Parameters saved successfully!");
+    toast.success("Parameters saved successfully!");
   }
 
   return (

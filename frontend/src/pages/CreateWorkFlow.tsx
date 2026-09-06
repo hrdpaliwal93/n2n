@@ -12,6 +12,7 @@ import Parameters from '@/components/Parameters';
 import HttpRequest from '@/nodes/Actions/HttpRequest';
 import ifElse from '@/nodes/conditions/ifElse';
 import Email from '@/nodes/Actions/Email';
+import WebSearch from '@/nodes/Actions/WebSearch';
 import { type NodeTypes,type  EdgeTypes } from '@/types/types';
 
 
@@ -22,7 +23,8 @@ const nodetypes = {
   httprequest:HttpRequest,
   aichat:AIChatResponse,
   ifelse:ifElse,
-  sendemail:Email
+  sendemail:Email,
+  websearch:WebSearch
 }
 
 

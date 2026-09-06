@@ -42,6 +42,8 @@ export default function AIChatResponse() {
 
 
 
+import { toast } from "react-toastify";
+
 export function AIChatParams({ node}: { node?: NodeTypes }) {
     const output = node.output
 
@@ -87,7 +89,7 @@ export function AIChatParams({ node}: { node?: NodeTypes }) {
           : n
       )
     );
-    alert("AI Chat Node Parameters Saved!");
+    toast.success("AI Chat Node Parameters Saved!");
   }
 
   return (

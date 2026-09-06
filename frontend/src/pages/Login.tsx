@@ -6,6 +6,8 @@ import { useRef, useState } from "react"
 
 
 
+import { toast } from 'react-toastify'
+
 export default function Login() {
   const { navigate, setUser, setToken } = useAppContext()
   const usernameref = useRef(null)
@@ -36,8 +38,11 @@ export default function Login() {
       setUser(response.data.userdetails.username)
 
       setToken(response.data.token)
+      toast.success(`Welcome back, ${response.data.userdetails.username}!`);
       navigate('/')
-    }else alert(response.data.message)
+    } else {
+      toast.error(response.data.message || "Login failed!");
+    }
 
     setLoading(false)
   }
@@ -46,9 +51,10 @@ export default function Login() {
       headers: { 'Content-Type': "application/json" }
     })
     if (response.data.success) {
-      alert("sigup successful, now login once to continue !!")
-
-
+      toast.success("Signup successful! Please login to continue.");
+      setIslogin(true);
+    } else {
+      toast.error(response.data.message || "Signup failed!");
     }
   }
   async function handlesubmit(e: React.FormEvent) {

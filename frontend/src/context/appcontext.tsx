@@ -4,6 +4,8 @@ import { type NodeTypes, type EdgeTypes , type nodeDefineSchema} from "../types/
 import axios from 'axios'
 
 
+import { toast } from 'react-toastify';
+
 interface AppContextType {
   nodes: NodeTypes[];
   setNodes: React.Dispatch<React.SetStateAction<NodeTypes[]>>;
@@ -92,10 +94,13 @@ useEffect(()=>{
             output: response.data.result ? response.data.result[n.id] : null
           }))
         );
-        alert(response.data.message);
-      }else {alert(response.data.result?.message);}
+        toast.success(response.data.message || "Workflow executed successfully!");
+      } else {
+        toast.error(response.data.message || "Execution failed!");
+      }
     } catch (e: any) {
       console.error(e.message);
+      toast.error(e.message || "An unexpected error occurred");
     }
   }
 

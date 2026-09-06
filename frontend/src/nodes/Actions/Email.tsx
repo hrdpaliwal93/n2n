@@ -1,5 +1,6 @@
 import { Handle, Position } from "@xyflow/react";
 import { useState, useEffect } from "react";
+import { toast } from 'react-toastify';
 import { useAppContext } from "@/context/appcontext";
 import type { NodeTypes, emailparams } from "@/types/types";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,7 @@ export default function Email() {
   );
 }
 
-export function EmailParams({ node }: { node?: NodeTypes }) {
+export function EmailParams({ node }: { node: NodeTypes }) {
   const { setNodes } = useAppContext();
 
   const initialMetadata = (node?.data?.metadata as emailparams);
@@ -79,8 +80,7 @@ export function EmailParams({ node }: { node?: NodeTypes }) {
       )
     );
     console.log(updatedEmailParams)
-    alert("Email Node Parameters Saved!");
-
+    toast.success("Email Node Parameters Saved!");
   }
 
   return (
