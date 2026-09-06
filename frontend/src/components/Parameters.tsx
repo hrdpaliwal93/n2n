@@ -41,7 +41,7 @@ export default function Parameters({ node, onClose }: { node: NodeTypes, onClose
 
                 <div className="py-4">
                     {ParamForm ? (
-                        <ParamForm node={node} />
+                        <ParamForm node={node}  />
                     ) : (
                         <div className="p-4 border border-dashed rounded-md text-center text-sm text-muted-foreground">
                             No configurable parameters available for node type: <span className="font-mono font-semibold">{node.type}</span>

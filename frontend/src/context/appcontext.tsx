@@ -10,7 +10,7 @@ interface AppContextType {
   edges: EdgeTypes[];
   setEdges: React.Dispatch<React.SetStateAction<EdgeTypes[]>>;
   navigate: NavigateFunction;
-  saveWorkflow: () => Promise<void>;
+  saveWorkflowandexecute: () => Promise<void>;
   user: string,
   setUser: React.Dispatch<React.SetStateAction<string>>,
   password: string,
@@ -61,33 +61,46 @@ useEffect(()=>{
     navigate('/')
   }
 
-  async function saveWorkflow() {
-    
+  async function saveWorkflowandexecute() {
     const workflow = {
       Nodes: nodes,
       Edges: edges,
-    }
+    };
+    const workflowid = localStorage.getItem('workflowid');
+
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/save-workflow`,
-        workflow,
+        `${import.meta.env.VITE_BACKEND_URL}/execute-workflow`,
+        {
+          workflow,
+          workflowid: workflowid || undefined,
+        },
         {
           headers: {
             "Authorization": `Bearer ${token}`
           },
         }
-      )
+      );
 
       if (response.data.success) {
-        alert(response.data.message)
-      }
+        if (response.data.workflowid) {
+          localStorage.setItem('workflowid', response.data.workflowid);
+        }
+        setNodes((prevnodes) =>
+          prevnodes.map((n) => ({
+            ...n,
+            output: response.data.result ? response.data.result[n.id] : null
+          }))
+        );
+        alert(response.data.message);
+      }else {alert(response.data.result?.message);}
     } catch (e: any) {
-      console.error(e.message)
+      console.error(e.message);
     }
   }
 
 
-  const value = { nodes, setNodes, logout, edges, setEdges, nodeList,setNodeList,  navigate, saveWorkflow, user, setUser, token, setToken ,password, setPassword}
+  const value = { nodes, setNodes, logout, edges, setEdges, nodeList,setNodeList,  navigate, saveWorkflowandexecute, user, setUser, token, setToken ,password, setPassword}
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }

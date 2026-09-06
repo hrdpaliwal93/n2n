@@ -1,4 +1,4 @@
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { useEffect, useState } from "react";
 
 import { useAppContext } from "@/context/appcontext";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import type { aichatparams } from "@/types/types";
 
 export default function AIChatResponse() {
+
   return (
     <div className="bg-white dark:bg-slate-900 border-2 border-purple-500 rounded-xl p-3.5 shadow-md min-w-[220px] text-slate-900 dark:text-slate-100">
       {/* Node Header */}
@@ -41,7 +42,8 @@ export default function AIChatResponse() {
 
 
 
-export function AIChatParams({ node }: { node?: NodeTypes }) {
+export function AIChatParams({ node}: { node?: NodeTypes }) {
+    const output = node.output
 
   const { setNodes } = useAppContext();
   const [modelprovider, setModelProvider] = useState("");
@@ -63,6 +65,12 @@ export function AIChatParams({ node }: { node?: NodeTypes }) {
     setApikey(meta.apikey || "");
     setModelProvider(meta.modelprovider || "gemini");
   }, [node?.id, node?.data?.metadata]);
+
+  useEffect(() => {
+    if (output) {
+      setresponse(typeof output ==='object' ? JSON.stringify(output): output);
+    }
+  }, [output]);
 
  function handleSaveNodeData() {
     if (!node) return;
@@ -94,7 +102,7 @@ export function AIChatParams({ node }: { node?: NodeTypes }) {
           onChange={(e) => setModelProvider(e.target.value)}
           className="w-full border rounded-md p-2 text-sm bg-background"
         >
-          <option value="gemini">Google Gemini (gemini-1.5-flash)</option>
+          <option value="gemini">gemini-3.8-flash</option>
           <option value="groq">Groq (llama-3.3-70b)</option>
           <option value="openai">OpenAI (gpt-4o-mini)</option>
         </select>
@@ -140,14 +148,11 @@ export function AIChatParams({ node }: { node?: NodeTypes }) {
         <label className="text-xs font-semibold block mb-1">Response</label>
         <textarea
           value={response}
-          
+          onChange={(e) => setresponse(e.target.value)}
           placeholder="Response from AI"
-          className="w-full border rounded-md p-2 text-sm bg-background h-24"
+          className="w-full border rounded-md p-2 text-sm bg-background h-50"
         />
       </div>
-
-
-
     </div>
   );
 }

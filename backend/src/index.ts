@@ -52,23 +52,7 @@ app.post('/login', async (req, res) => {
 })
 
 
-app.post('/save-workflow', Auth, async (req, res) => {
-    const workflow = (req.body);
-    const id = req.id as string
-    try {
-        await workflowModel.create({
-            title: "my firtt workflow",
-            userID: id,
-            nodes: workflow.Nodes,
-            edges: workflow.Edges
-        })
-        res.json({ message: "workflow saved ", success: true })
-    } catch (e: any) {
-        console.error(e.message)
-    }
 
-
-})
 
 
 app.get('/workflows', Auth, async (req, res) => {
@@ -94,40 +78,57 @@ app.get('/nodes', async (req, res) => {
 })
 
 
-app.post('/execute-workflow', async (req, res) => {
-    const workflowid = req.body.workflowid;
-
+app.post('/execute-workflow', Auth, async (req, res) => {
+    const { workflow, workflowid } = req.body;
+    console.log(workflow)
+    const id = req.id as string;
     try {
-        const workflow = await workflowModel.findOne({ workflowid })
-        //find a trigger node, if not return message
-
-        if (!workflow) {
-            res.json({ message: "worflow does not exixts", success: false })
-            return
+        let w;
+        if (!workflowid || workflowid==='undefined' || workflowid==='null') {
+            w = await workflowModel.create({
+                title: "my first workflow",
+                userID: id,
+                nodes: workflow?.Nodes,
+                edges: workflow?.Edges
+            });
+        } else {
+            w = await workflowModel.findByIdAndUpdate(
+                workflowid,
+                { nodes: workflow?.Nodes || [], edges: workflow?.Edges || [] },
+                { new: true }
+            );
+            if(!w){
+                w = await workflowModel.create({
+                title: "my first workflow",
+                userID: id,
+                nodes: workflow?.Nodes,
+                edges: workflow?.Edges
+            });
+            }
         }
-        const result = await executeworkflow(workflow);
-        res.json({ message: "workflow output", success: true, result });
-
-
+        const result = await executeworkflow(w);
+        res.json({ message: result.success ?  "workflow saved and executed" : result.message, success: result.success? true: false, result, workflowid: w?._id });
     } catch (e: any) {
+        console.error(e.message);
         res.status(500).json({ message: e.message, success: false });
     }
-})
+});
 
 function gettriggernode(workflow: any) {
     return workflow.nodes.find((node: any) => node.category == "trigger")
 }
 
 async function executeworkflow(workflow: any) {
-    const triggernode = gettriggernode(workflow)
-    if (!triggernode) return { messsage: "workflow should have a trigger node", success: false }
+    const triggernode = await gettriggernode(workflow)
+    if (!triggernode) return  { message: "workflow should have a trigger node", success: false }
 
     let queue: string[] = [triggernode.id]
 
     let runData: Record<string, unknown> = {}
     while (queue.length > 0) {
         let currentnode: string = queue.shift() as string
-        let node = await nodeModel.findOne({ id: currentnode })
+       let node = workflow.nodes.find((n: any) => n.id === currentnode);
+       console.log("found node: ")
         let parentedge = workflow.edges.find((edge: any) => edge.target == currentnode)
         let input = parentedge ? runData[parentedge.source] : null;
         switch (node?.type) {
@@ -154,16 +155,17 @@ async function executeworkflow(workflow: any) {
 }
 
 async function aichatexecute(node: any, input: any) {
-    const { modelprovider, prompt, apikey } = node.data
+    const { modelprovider, prompt, apikey } = node.data.metadata
     let finalPrompt = prompt
+    console.log(finalPrompt)
     if (input) {
         const inputString = typeof input === 'object' ? JSON.stringify(input) : input;
         finalPrompt = `${finalPrompt}\n\nInput Data:\n${inputString}`;
     }
-    const ai = new GoogleGenAI({ apiKey: apikey });
+    const ai = new GoogleGenAI({ apiKey: `${apikey}` });
 
     const interaction = await ai.interactions.create({
-        model: `${modelprovider}`,
+        model: "gemini-3.8-flash",
         input: `${finalPrompt}`,
     });
 
@@ -172,11 +174,34 @@ async function aichatexecute(node: any, input: any) {
 
 
 async function httprequestexecute(node: any) {
-    const { headers, body, method, url } = node.Data
-    if (method.toLowerCase() == "get") {
-        const response = await axios.get(url, headers);
-        return response;
+   const metadata = node.data?.metadata 
+    const { headers, body, method, url } = metadata;
+    if (!url) {
+        return { error: "URL is missing for HTTP Request node" };
     }
-
+    const httpMethod = (method || "GET").toUpperCase();
+    const config = {
+        headers: {
+            'content-type':"application/json"
+        }
+    };
+    try {
+        let response;
+        if (httpMethod === "GET") {
+            response = await axios.get(url, config);
+        } else if (httpMethod === "POST") {
+            response = await axios.post(url, body || {}, config);
+        } else if (httpMethod === "PUT") {
+            response = await axios.put(url, body || {}, config);
+        } else if (httpMethod === "DELETE") {
+            response = await axios.delete(url, config);
+        } else if (httpMethod === "PATCH") {
+            response = await axios.patch(url, body || {}, config);
+        }
+        return response?.data
+    } catch (err: any) {
+        console.error("HTTP Request Error:", err.message);
+        return { error: err.response?.data || err.message };
+    }
 }
 app.listen(8000)

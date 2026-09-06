@@ -16,7 +16,7 @@ import { useAppContext } from "@/context/appcontext"
 
 export default function Triggersheet() {
 
-  const { setNodes , setEdges, saveWorkflow, nodeList} = useAppContext()
+  const { setNodes , setEdges, saveWorkflowandexecute, nodeList} = useAppContext()
 
 
   function createNodeHandler(category: string, label: string, type:string) {
@@ -47,7 +47,7 @@ const conditions = nodeList.filter((node)=>node.category=="condition")
       
       <SheetTrigger render={<Button variant="outline">Add Node</Button>} />
       <Button variant="destructive" onClick={() => {setNodes([]); setEdges([])}}>Clear Workflow</Button>
-      <Button variant="default" onClick={saveWorkflow}>Save Workflow</Button>
+      <Button variant="default" onClick={saveWorkflowandexecute}>Execute Workflow</Button>
       <SheetContent className={"overflow-y-scroll"}>
         {
         

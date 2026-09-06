@@ -34,6 +34,7 @@ export default function httprequest() {
 
 
 export function HttpRequestParams({ node }: { node: NodeTypes }) {
+   const output = node.output
   const { setNodes } = useAppContext();
 
   const metadata = (node?.data?.metadata as httprequestparams);
@@ -153,6 +154,16 @@ export function HttpRequestParams({ node }: { node: NodeTypes }) {
       <Button variant="default" onClick={handleSave} className="w-full mt-2">
         Save Parameters
       </Button>
+
+ <div>
+        <label className="text-xs font-semibold block mb-1">Request Response</label>
+        <textarea
+          value={typeof output ==='object' ? JSON.stringify(output) :  output}
+          
+          placeholder="Request Response"
+          className="w-full border rounded-md p-2 text-sm bg-background h-50"
+        />
+      </div>
     </div>
   );
 }
