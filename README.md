@@ -7,20 +7,21 @@
 ## 📋 Table of Contents
 
 - [Overview](#overview)
-- [Architecture & Tech Stack](#architecture--tech-stack)
-- [Feature Matrix & Implementation Status](#feature-matrix--implementation-status)
-- [Node Types & Execution Capabilities](#node-types--execution-capabilities)
+- [Architecture & Tech Stack](#architecture-tech-stack)
+- [Feature Matrix & Implementation Status](#feature-matrix-implementation-status)
+- [Node Types & Execution Capabilities](#node-types-execution-capabilities)
 - [Directory Structure](#directory-structure)
 - [Prerequisites](#prerequisites)
 - [Environment Configuration](#environment-configuration)
-- [Setup & Installation Instructions](#setup--installation-instructions)
+- [Setup & Installation Instructions](#setup-installation-instructions)
 - [API Reference](#api-reference)
 - [Workflow Execution Engine Data Flow](#workflow-execution-engine-data-flow)
-- [Known Limitations & Current Scope](#known-limitations--current-scope)
+- [Known Limitations & Current Scope](#known-limitations-current-scope)
 - [License](#license)
 
 ---
 
+<a id="overview"></a>
 ## 🔍 Overview
 
 `n2n` is designed to streamline process automation by enabling users to design workflows visually on a web-based node editor and execute them asynchronously on a backend engine. 
@@ -29,6 +30,7 @@ Workflows consist of **Triggers** (initiating events), **Actions** (AI execution
 
 ---
 
+<a id="architecture-tech-stack"></a>
 ## 🛠️ Architecture & Tech Stack
 
 ### Technology Components
@@ -51,6 +53,7 @@ Workflows consist of **Triggers** (initiating events), **Actions** (AI execution
 
 ---
 
+<a id="feature-matrix-implementation-status"></a>
 ## 📊 Feature Matrix & Implementation Status
 
 > ⚠️ **Note on Project Scope**: To maintain transparency, all features are categorized by their exact implementation state below.
@@ -74,6 +77,7 @@ Workflows consist of **Triggers** (initiating events), **Actions** (AI execution
 
 ---
 
+<a id="node-types-execution-capabilities"></a>
 ## 🧩 Node Types & Execution Capabilities
 
 The system categorizes nodes into three primary groups:
@@ -91,6 +95,7 @@ The system categorizes nodes into three primary groups:
 
 ---
 
+<a id="directory-structure"></a>
 ## 📁 Directory Structure
 
 ```text
@@ -142,6 +147,7 @@ n2n/
 
 ---
 
+<a id="prerequisites"></a>
 ## ⚡ Prerequisites
 
 Before setting up `n2n`, ensure you have the following installed on your system:
@@ -154,6 +160,7 @@ Before setting up `n2n`, ensure you have the following installed on your system:
 
 ---
 
+<a id="environment-configuration"></a>
 ## ⚙️ Environment Configuration
 
 ### Backend Environment Variables (`backend/.env`)
@@ -182,6 +189,7 @@ VITE_BACKEND_URL=http://localhost:8000
 
 ---
 
+<a id="setup-installation-instructions"></a>
 ## 🚀 Setup & Installation Instructions
 
 Follow these step-by-step instructions to get the application running locally.
@@ -227,6 +235,7 @@ npm run dev
 
 ---
 
+<a id="api-reference"></a>
 ## 📡 API Reference
 
 ### Authentication & User Routes
@@ -246,6 +255,7 @@ npm run dev
 
 ---
 
+<a id="workflow-execution-engine-data-flow"></a>
 ## 🔄 Workflow Execution Engine Data Flow
 
 ```text
@@ -270,6 +280,7 @@ npm run dev
 
 ---
 
+<a id="known-limitations-current-scope"></a>
 ## 📌 Known Limitations & Current Scope
 
 To prevent misrepresentation, the following capabilities represent current design boundaries:
@@ -281,6 +292,7 @@ To prevent misrepresentation, the following capabilities represent current desig
 
 ---
 
+<a id="license"></a>
 ## 📜 License
 
 This project is licensed under the [ISC License](https://opensource.org/licenses/ISC).
